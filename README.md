@@ -6,9 +6,15 @@
 
 ### 2. 安装
 
+```bash
+npm install ac-attachment -S
+```
 
 ### 3. 使用
-
+```javascript
+import AcAttachment from 'ac-attachment';
+import 'ac-attachment/build/ac-attachment.css';
+```
 
 ```javascript
 <AcAttachment fielpath='' groupname='' />
