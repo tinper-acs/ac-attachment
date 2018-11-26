@@ -12,7 +12,7 @@ import Button from 'bee-button';
 import Checkbox from 'bee-checkbox';
 import Icon from 'bee-icon';
 import axios from 'axios';
-import './index.scss';
+import './index.less';
 
 const propTypes = {
 	filepath: PropTypes.string,
@@ -56,6 +56,7 @@ class AcAttachment extends Component{
             action: props.uploadUrl
         }
         this.selectedFiles = null;
+        this.fileTypeIcons = ['css','doc','html','javascript','jpg','pdf','png','ppt','xls','xml'];
         bindAll(this,['fGetTableColumns','fLoadFileList','fDeleteFile','fUploadSuccess','fUploadDelete',
                       'fDownload','fDelete','fGetSelectedData']);
 	}
@@ -131,7 +132,9 @@ class AcAttachment extends Component{
             { title: '', dataIndex: '', key: '', width: 50, 
               render(text, record, index) {
                 return (
-                  <a href={downloadUrl + '?id=' + record.id} target="_blank">下载</a>
+                  <a href={downloadUrl + '?id=' + record.id} target="_blank">
+                    <Icon className="uf-cloud-down"></Icon>
+                  </a>
                 );
               }},
             { title: '附件名称', dataIndex: 'filename', key: 'filename', width: 200, 
@@ -164,7 +167,17 @@ class AcAttachment extends Component{
                     return 1;
                 }
             },
-			{ title: '文件类型', dataIndex: 'filetype', key: 'filetype', width: 100 },
+			{ title: '文件类型', dataIndex: 'filetype', key: 'filetype', width: 100, render(text, record, index) {
+                let ext = record.filetype;
+                let filetypeCls = 'upload-filetype-' + ext;
+                let hasIcon = self.fileTypeIcons.indexOf(ext) > -1;
+
+                return (
+                    <React.Fragment>
+                        {hasIcon ? <span className={'upload-filetype ' + filetypeCls}></span> : <span>{ext}</span>}
+                    </React.Fragment>
+                );
+              }},
             { title: '上传时间', dataIndex: 'uploadtime', key: 'uploadtime', width: 200,
                 sorter:function(a,b){
                     return self.fCompareUploadTime(a,b);
@@ -214,9 +227,9 @@ class AcAttachment extends Component{
         //     }
         // });
         let tableList = fileList.map(function(item){
-            const regExt = /\.\w+$/;
+            const regExt = /\.(\w+)$/;
             let filetypeMatch = item.filename.match(regExt);
-            let filetype = filetypeMatch ? filetypeMatch[0] : '';
+            let filetype = filetypeMatch ? filetypeMatch[1] : '';
 
             return {
                 ...item,
@@ -245,10 +258,16 @@ class AcAttachment extends Component{
 					onSuccess={this.fUploadSuccess}
 					onDelete={this.fUploadDelete}
 				>
-					<Button colors="primary" className="upload-btn" size='sm'>上传附件</Button>
+                    <Button colors="primary" className="upload-btn" size='sm'>
+                        <Icon className="uf uf-upload">上传附件</Icon>
+                    </Button>
                 </AcUpload>
-                <Button colors="primary" className="upload-btn" size='sm' onClick={this.fDownload}>下载</Button>
-                <Button colors="primary" className="upload-btn" size='sm' onClick={this.fDelete}>删除</Button>
+                <Button colors="primary" className="upload-btn" size='sm' onClick={this.fDownload}>
+                    <Icon className="uf uf-download">下载</Icon>
+                </Button>
+                <Button colors="primary" className="upload-btn" size='sm' onClick={this.fDelete}>
+                    <Icon className="uf uf-del">删除</Icon>
+                </Button>
                 <MultiSelectSortTable
                     className='upload-table'
 					columns={columns}
