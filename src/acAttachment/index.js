@@ -67,7 +67,7 @@ class AcAttachment extends Component{
         const self = this;
 		const {queryUrl,downloadUrl,filepath,groupname,permission} = self.props;
 
-        axios({
+        return axios({
             url: queryUrl,
             params: {
                 filepath: filepath,
@@ -94,7 +94,7 @@ class AcAttachment extends Component{
                 id: id
             }
         }).then(function(res){
-            console.log(res);
+            return res;
         }).catch(function (error) {
             console.log(error);
         });
@@ -112,14 +112,18 @@ class AcAttachment extends Component{
     }
     fDownload(){
         const {downloadUrl} = this.props;
-        //打开多个窗口
+        //打开多个窗口，会被拦截，需要手动允许
         this.selectedFiles.forEach((item) => {
             window.open(downloadUrl + '?id=' + item.id);
         });
     }
     fDelete(){
-        //批量删除，等待后端支持
-        alert('等待后端接口');
+        //后端接口未支持批量删除，暂时使用循环删除
+        axios.all(this.selectedFiles.map((item) => {
+            return this.fDeleteFile(item.id);
+        })).then(() => {
+            this.fLoadFileList();
+        });
     }
     fGetSelectedData(data){
         this.selectedFiles = data;
