@@ -14,6 +14,8 @@ import Icon from 'bee-icon';
 import axios from 'axios';
 import './index.less';
 
+let MultiSelectSortTable  = multiSelect(sort(Table, Icon), Checkbox);
+
 const propTypes = {
 	filepath: PropTypes.string,
     groupname: PropTypes.string,
@@ -39,23 +41,15 @@ const defaultProps = {
     fileMaxSize: 10 * 1024 * 1024 //默认10M
 }
 
-// const uploadData = {
-//     fileElementId: 'uploadbatch_id',
-//     filepath: defaultProps.filepath,
-//     groupname: defaultProps.groupname,
-//     permission: defaultProps.permission,
-//     url: defaultProps.url,
-//     cross_url: '/iuap-saas-filesystem-service/'
-// }
-
 class AcAttachment extends Component{
     constructor(props){
 		super(props);
 		this.state = {
             fileList: [],
-            action: props.uploadUrl
+            action: props.uploadUrl,
+            selectedFiles: []
         }
-        this.selectedFiles = null;
+        this.selectedFiles = [];
         this.fileTypeIcons = ['css','doc','html','javascript','jpg','pdf','png','ppt','xls','xml'];
         bindAll(this,['fGetTableColumns','fLoadFileList','fDeleteFile','fUploadSuccess','fUploadDelete',
                       'fDownload','fDelete','fGetSelectedData']);
@@ -127,6 +121,9 @@ class AcAttachment extends Component{
     }
     fGetSelectedData(data){
         this.selectedFiles = data;
+        this.setState({
+            selectedFiles: data
+        })
     }
 	fGetTableColumns(){
         const self = this;
@@ -215,7 +212,7 @@ class AcAttachment extends Component{
     }
 	render(){
 		const columns = this.fGetTableColumns();
-		let {fileList} = this.state;
+		let {fileList,selectedFiles} = this.state;
 		let {filepath,groupname,permission,url,uploadUrl,downloadUrl,fileType,fileMaxSize} = this.props;
 		let uploadData = {
 			filepath: filepath,
@@ -234,18 +231,25 @@ class AcAttachment extends Component{
             const regExt = /\.(\w+)$/;
             let filetypeMatch = item.filename.match(regExt);
             let filetype = filetypeMatch ? filetypeMatch[1] : '';
-
+            //修复table的checkbox不选中bug
+            let _checked = false;
+            selectedFiles.forEach((sf) => {
+                if(sf.id == item.id){
+                    _checked = sf._checked;
+                }
+            })
             return {
                 ...item,
                 key: item.id,
                 uploader: 'todo',
-                filetype: filetype               
+                filetype: filetype,
+                _checked: _checked               
             }
         });
         //数据按照上传时间倒序
         tableList.sort(this.fCompareUploadTime);
-
-        let MultiSelectSortTable  = multiSelect(sort(Table, Icon), Checkbox);
+        
+        let battchEnable = selectedFiles && selectedFiles.length > 0;
 
 		return (
 			<div>
@@ -266,10 +270,10 @@ class AcAttachment extends Component{
                         <Icon className="uf uf-upload">上传附件</Icon>
                     </Button>
                 </AcUpload>
-                <Button colors="primary" className="upload-btn" size='sm' onClick={this.fDownload}>
+                <Button colors="primary" disabled={!battchEnable} className="upload-btn" size='sm' onClick={this.fDownload}>
                     <Icon className="uf uf-download">下载</Icon>
                 </Button>
-                <Button colors="primary" className="upload-btn" size='sm' onClick={this.fDelete}>
+                <Button colors="primary" disabled={!battchEnable} className="upload-btn" size='sm' onClick={this.fDelete}>
                     <Icon className="uf uf-del">删除</Icon>
                 </Button>
                 <MultiSelectSortTable
