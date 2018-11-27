@@ -13,7 +13,7 @@ import Checkbox from 'bee-checkbox';
 import Popconfirm from 'bee-popconfirm';
 import Icon from 'bee-icon';
 import axios from 'axios';
-import './index.less';
+import './index.scss';
 
 let MultiSelectSortTable  = multiSelect(sort(Table, Icon), Checkbox);
 
