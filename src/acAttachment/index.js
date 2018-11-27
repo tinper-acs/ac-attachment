@@ -33,6 +33,7 @@ const propTypes = {
 }
 
 const defaultProps = {
+    baseUrl: '',
 	uploadUrl: '/iuap-saas-filesystem-service/file/upload',
 	queryUrl: '/iuap-saas-filesystem-service/file/query',
 	deleteUrl: '/iuap-saas-filesystem-service/file/delete',
