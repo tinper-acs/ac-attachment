@@ -36,6 +36,7 @@ const defaultProps = {
 	queryUrl: '/iuap-saas-filesystem-service/file/query',
 	deleteUrl: '/iuap-saas-filesystem-service/file/delete',
     downloadUrl: '/iuap-saas-filesystem-service/file/download',
+    batchDeleteUrl: '/iuap-saas-filesystem-service/file/batchDeleteByIds',
     fileMaxSize: 10 * 1024 * 1024, //默认10M
     deleteConfirm: true
 }
@@ -91,7 +92,25 @@ class AcAttachment extends Component{
         }).catch(function (error) {
             console.log(error);
         });
-	}
+    }
+    fBatchDeleteFiles(ids){
+        const self = this;
+        const {batchDeleteUrl} = self.props;
+        if(Array.isArray(ids)){
+            ids = ids.join(',');
+        }
+
+        return axios({
+            url: batchDeleteUrl,
+            params: {
+                ids: ids
+            }
+        }).then(function(res){
+            return res;
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
 	//成功之后添加文件进列表
     fUploadSuccess = (data) => {
         const self = this;
@@ -111,10 +130,8 @@ class AcAttachment extends Component{
         });
     }
     fDelete(){
-        //后端接口未支持批量删除，暂时使用循环删除
-        axios.all(this.selectedFiles.map((item) => {
-            return this.fDeleteFile(item.id);
-        })).then(() => {
+        const ids = this.selectedFiles.map((item) => item.id);
+        this.fBatchDeleteFiles(ids).then(() => {
             this.fLoadFileList();
             this.setState({
                 selectedFiles: []
