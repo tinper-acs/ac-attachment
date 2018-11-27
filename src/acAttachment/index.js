@@ -10,6 +10,7 @@ import multiSelect from "bee-table/build/lib/multiSelect.js";
 import sort from 'bee-table/build/lib/sort.js';
 import Button from 'bee-button';
 import Checkbox from 'bee-checkbox';
+import Popconfirm from 'bee-popconfirm';
 import Icon from 'bee-icon';
 import axios from 'axios';
 import './index.less';
@@ -26,7 +27,8 @@ const propTypes = {
 	deleteUrl: PropTypes.string,
     downloadUrl: PropTypes.string,
     fileType: PropTypes.string,
-    fileMaxSize: PropTypes.number
+    fileMaxSize: PropTypes.number,
+    deleteConfirm: PropTypes.bool
 }
 
 const defaultProps = {
@@ -34,7 +36,8 @@ const defaultProps = {
 	queryUrl: '/iuap-saas-filesystem-service/file/query',
 	deleteUrl: '/iuap-saas-filesystem-service/file/delete',
     downloadUrl: '/iuap-saas-filesystem-service/file/download',
-    fileMaxSize: 10 * 1024 * 1024 //默认10M
+    fileMaxSize: 10 * 1024 * 1024, //默认10M
+    deleteConfirm: true
 }
 
 class AcAttachment extends Component{
@@ -211,6 +214,21 @@ class AcAttachment extends Component{
         }
         return aDate > bDate ? -1 : 1;
     }
+    renderDel(battchEnable){
+        let {deleteConfirm} = this.props;
+        return (
+            deleteConfirm ? 
+                (<Popconfirm trigger="click" placement="bottom" content={'确定要删除吗？'} onClose={this.fDelete}>
+                    <Button colors="primary" disabled={!battchEnable} className="upload-btn" size='sm'>
+                        <Icon className="uf uf-del">删除</Icon>
+                    </Button>
+                </Popconfirm>)
+                :
+                (<Button colors="primary" disabled={!battchEnable} className="upload-btn" size='sm' onClick={this.fDelete}>
+                    <Icon className="uf uf-del">删除</Icon>
+                </Button>)
+        )
+    }
 	render(){
 		const columns = this.fGetTableColumns();
 		let {fileList,selectedFiles} = this.state;
@@ -242,7 +260,7 @@ class AcAttachment extends Component{
             return {
                 ...item,
                 key: item.id,
-                uploader: 'todo',
+                uploader: '',
                 filetype: filetype,
                 _checked: _checked               
             }
@@ -274,9 +292,7 @@ class AcAttachment extends Component{
                 <Button colors="primary" disabled={!battchEnable} className="upload-btn" size='sm' onClick={this.fDownload}>
                     <Icon className="uf uf-download">下载</Icon>
                 </Button>
-                <Button colors="primary" disabled={!battchEnable} className="upload-btn" size='sm' onClick={this.fDelete}>
-                    <Icon className="uf uf-del">删除</Icon>
-                </Button>
+                {this.renderDel(battchEnable)}
                 <MultiSelectSortTable
                     className='upload-table'
 					columns={columns}
