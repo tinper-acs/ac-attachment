@@ -33,8 +33,8 @@ Parameter | Type | Default | Required | Description
 --------- | ---- | ------|----------- | -----------------
 filepath | `string` | | 是 | 单据相关的唯一标示，一般包含单据ID，如果有多个附件的时候由业务自己制定规则 
 groupname | `string` |  | 是 | 分组名
-permission | `string` | `read` | 否 | Oss权限(read，private，full),read是可读=公有，private=私有，当这个参数不传的时候会默认private
-url | `string` | `true` | 否 | 里传true或false。为true，则返回附件的连接地址存到数据库中；如果isencrypt设置为true，url不能设置为true否则不能上传，提示：对于加密文件不能返回url，返回了也无法访问
+permission | `string` |  | 否 | Oss权限(read，private，full),read是可读=公有，private=私有，当这个参数不传的时候会默认private
+url | `string` |  | 否 | 里传true或false。为true，则返回附件的连接地址存到数据库中；如果isencrypt设置为true，url不能设置为true否则不能上传，提示：对于加密文件不能返回url，返回了也无法访问
 isencrypt | `boolean` | `false` | 否 | 是否加密，默认false不加密
 uploadUrl | `string` | `/iuap-saas-filesystem-service/file/upload` | 否 | 应用平台上传文件的地址
 queryUrl | `string` | `/iuap-saas-filesystem-service/file/query` | 否 | 应用平台查询附件的地址

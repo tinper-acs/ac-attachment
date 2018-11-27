@@ -30,10 +30,6 @@ const propTypes = {
 }
 
 const defaultProps = {
-	filepath: '56f1d786-127b-46d9-9ae3-43ca11486720',
-    groupname: 'ygdemo',
-    permission: 'read',
-	url: true,
 	uploadUrl: '/iuap-saas-filesystem-service/file/upload',
 	queryUrl: '/iuap-saas-filesystem-service/file/query',
 	deleteUrl: '/iuap-saas-filesystem-service/file/delete',
@@ -117,6 +113,9 @@ class AcAttachment extends Component{
             return this.fDeleteFile(item.id);
         })).then(() => {
             this.fLoadFileList();
+            this.setState({
+                selectedFiles: []
+            })
         });
     }
     fGetSelectedData(data){
