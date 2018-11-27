@@ -18,7 +18,7 @@ import './index.scss';
 let MultiSelectSortTable  = multiSelect(sort(Table, Icon), Checkbox);
 
 const propTypes = {
-	filepath: PropTypes.string,
+	recordId: PropTypes.string,
     groupname: PropTypes.string,
     permission: PropTypes.oneOf(['read','private','full']),
     url: PropTypes.bool,
@@ -76,12 +76,12 @@ class AcAttachment extends Component{
 	}
 	fLoadFileList(){
         const self = this;
-        const {filepath,groupname,permission} = self.props;
+        const {recordId,groupname,permission} = self.props;
 
         return axios({
             url: self.queryUrl,
             params: {
-                filepath: filepath,
+                filepath: recordId,
                 groupname: groupname,
                 permission: permission
             }
@@ -264,9 +264,9 @@ class AcAttachment extends Component{
 	render(){
 		const columns = this.fGetTableColumns();
 		let {fileList,selectedFiles} = this.state;
-		let {filepath,groupname,permission,url,fileType,fileMaxSize} = this.props;
+		let {recordId,groupname,permission,url,fileType,fileMaxSize} = this.props;
 		let uploadData = {
-			filepath: filepath,
+			filepath: recordId,
 			groupname: groupname,
 			permission: permission,
 			url: url
