@@ -21,7 +21,8 @@ const propTypes = {
 	filepath: PropTypes.string,
     groupname: PropTypes.string,
     permission: PropTypes.oneOf(['read','private','full']),
-	url: PropTypes.bool,
+    url: PropTypes.bool,
+    baseUrl: PropTypes.string,
 	uploadUrl: PropTypes.string,
 	queryUrl: PropTypes.string,
 	deleteUrl: PropTypes.string,
@@ -53,16 +54,31 @@ class AcAttachment extends Component{
         this.fileTypeIcons = ['css','doc','html','javascript','jpg','pdf','png','ppt','xls','xml'];
         bindAll(this,['fGetTableColumns','fLoadFileList','fDeleteFile','fUploadSuccess','fUploadDelete',
                       'fDownload','fDelete','fGetSelectedData']);
-	}
+    }
+    get uploadUrl(){
+        return `${this.props.baseUrl}${this.props.uploadUrl}`;
+    }
+    get queryUrl(){
+        return `${this.props.baseUrl}${this.props.queryUrl}`;
+    }
+    get deleteUrl(){
+        return `${this.props.baseUrl}${this.props.deleteUrl}`;
+    }
+    get downloadUrl(){
+        return `${this.props.baseUrl}${this.props.downloadUrl}`;
+    }
+    get batchDeleteUrl(){
+        return `${this.props.baseUrl}${this.props.batchDeleteUrl}`;
+    }
 	componentDidMount(){
 		this.fLoadFileList();
 	}
 	fLoadFileList(){
         const self = this;
-		const {queryUrl,downloadUrl,filepath,groupname,permission} = self.props;
+        const {filepath,groupname,permission} = self.props;
 
         return axios({
-            url: queryUrl,
+            url: self.queryUrl,
             params: {
                 filepath: filepath,
                 groupname: groupname,
@@ -80,10 +96,9 @@ class AcAttachment extends Component{
     }
     fDeleteFile(id){
 		const self = this;
-		const {deleteUrl} = self.props;
 
         return axios({
-            url: deleteUrl,
+            url: self.deleteUrl,
             params: {
                 id: id
             }
@@ -95,13 +110,12 @@ class AcAttachment extends Component{
     }
     fBatchDeleteFiles(ids){
         const self = this;
-        const {batchDeleteUrl} = self.props;
         if(Array.isArray(ids)){
             ids = ids.join(',');
         }
 
         return axios({
-            url: batchDeleteUrl,
+            url: self.batchDeleteUrl,
             params: {
                 ids: ids
             }
@@ -123,7 +137,7 @@ class AcAttachment extends Component{
         });
     }
     fDownload(){
-        const {downloadUrl} = this.props;
+        const downloadUrl = self.downloadUrl;
         //打开多个窗口，会被拦截，需要手动允许
         this.selectedFiles.forEach((item) => {
             window.open(downloadUrl + '?id=' + item.id);
@@ -146,7 +160,7 @@ class AcAttachment extends Component{
     }
 	fGetTableColumns(){
         const self = this;
-        const {downloadUrl} = this.props;
+        const downloadUrl = self.downloadUrl;
 
 		const columns = [
             { title: '', dataIndex: '', key: '', width: 50, 
@@ -249,13 +263,14 @@ class AcAttachment extends Component{
 	render(){
 		const columns = this.fGetTableColumns();
 		let {fileList,selectedFiles} = this.state;
-		let {filepath,groupname,permission,url,uploadUrl,downloadUrl,fileType,fileMaxSize} = this.props;
+		let {filepath,groupname,permission,url,fileType,fileMaxSize} = this.props;
 		let uploadData = {
 			filepath: filepath,
 			groupname: groupname,
 			permission: permission,
 			url: url
-        }
+        };
+        let uploadUrl = this.uploadUrl;
         // let uploadList = fileList.map(function(item){
         //     return {
         //         id: item.id,
