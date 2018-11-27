@@ -87,7 +87,7 @@
     "prop-types": "^15.6.0"
   },
   "dependencies": {
-    "ac-upload": "^0.1.4",
+    "ac-upload": "0.1.4",
     "axios": "^0.18.0",
     "bee-checkbox": "^1.2.6",
     "bee-icon": "^1.0.5",
