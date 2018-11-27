@@ -137,16 +137,24 @@ class AcAttachment extends Component{
                     <Icon className="uf-cloud-down"></Icon>
                   </a>
                 );
-              }},
+              }
+            },
             { title: '附件名称', dataIndex: 'filename', key: 'filename', width: 200, 
                 sorter:function(a,b){
                     return a.filename.localeCompare(b.filename);
                 }
             },
-            { title: '上传人', dataIndex: 'uploader', key: 'uploader', width: 100, 
-                sorter:function(a,b){
-                    return a.uploader.localeCompare(b.uploader);
-                }
+            { title: '文件类型', dataIndex: 'filetype', key: 'filetype', width: 100, render(text, record, index) {
+                let ext = record.filetype;
+                let filetypeCls = 'upload-filetype-' + ext;
+                let hasIcon = self.fileTypeIcons.indexOf(ext) > -1;
+
+                return (
+                    <React.Fragment>
+                        {hasIcon ? <span className={'upload-filetype ' + filetypeCls}></span> : <span>{ext}</span>}
+                    </React.Fragment>
+                );
+              }
             },
             { title: '文件大小', dataIndex: 'filesize', key: 'filesize', width: 100, 
                 sorter: function(a,b){
@@ -168,17 +176,11 @@ class AcAttachment extends Component{
                     return 1;
                 }
             },
-			{ title: '文件类型', dataIndex: 'filetype', key: 'filetype', width: 100, render(text, record, index) {
-                let ext = record.filetype;
-                let filetypeCls = 'upload-filetype-' + ext;
-                let hasIcon = self.fileTypeIcons.indexOf(ext) > -1;
-
-                return (
-                    <React.Fragment>
-                        {hasIcon ? <span className={'upload-filetype ' + filetypeCls}></span> : <span>{ext}</span>}
-                    </React.Fragment>
-                );
-              }},
+            { title: '上传人', dataIndex: 'uploader', key: 'uploader', width: 100, 
+                sorter:function(a,b){
+                    return a.uploader.localeCompare(b.uploader);
+                }
+            },
             { title: '上传时间', dataIndex: 'uploadtime', key: 'uploadtime', width: 200,
                 sorter:function(a,b){
                     return self.fCompareUploadTime(a,b);
