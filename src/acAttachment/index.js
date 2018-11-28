@@ -21,6 +21,7 @@ const propTypes = {
 	recordId: PropTypes.string,
     groupname: PropTypes.string,
     permission: PropTypes.oneOf(['read','private','full']),
+    tenant: PropTypes.string,
     url: PropTypes.bool,
     baseUrl: PropTypes.string,
 	uploadUrl: PropTypes.string,
@@ -29,7 +30,8 @@ const propTypes = {
     downloadUrl: PropTypes.string,
     fileType: PropTypes.string,
     fileMaxSize: PropTypes.number,
-    deleteConfirm: PropTypes.bool
+    deleteConfirm: PropTypes.bool,
+    className: PropTypes.string
 }
 
 const defaultProps = {
@@ -76,15 +78,18 @@ class AcAttachment extends Component{
 	}
 	fLoadFileList(){
         const self = this;
-        const {recordId,groupname,permission} = self.props;
+        const {recordId,groupname,tenant} = self.props;
+        const params = {
+            filepath: recordId,
+            groupname: groupname,
+        }
+        if(tenant){
+            params['tenant'] = tenant;
+        }
 
         return axios({
             url: self.queryUrl,
-            params: {
-                filepath: recordId,
-                groupname: groupname,
-                permission: permission
-            }
+            params: params
         }).then(function(res){
             if(res.data){
                 self.setState({
@@ -263,14 +268,23 @@ class AcAttachment extends Component{
     }
 	render(){
 		const columns = this.fGetTableColumns();
-		let {fileList,selectedFiles} = this.state;
-		let {recordId,groupname,permission,url,fileType,fileMaxSize} = this.props;
+        let {fileList,selectedFiles} = this.state;
+        fileList = fileList || [];
+        selectedFiles = selectedFiles || [];
+
+        let {recordId,groupname,permission,url,fileType,fileMaxSize,className} = this.props;
+        
 		let uploadData = {
 			filepath: recordId,
-			groupname: groupname,
-			permission: permission,
-			url: url
+			groupname: groupname
         };
+        if(permission){
+            uploadData['permission'] = permission;
+        }
+        if(url){
+            uploadData['url'] = url;
+        }
+
         let uploadUrl = this.uploadUrl;
         // let uploadList = fileList.map(function(item){
         //     return {
@@ -279,6 +293,7 @@ class AcAttachment extends Component{
         //         accessAddress: downloadUrl + '?id=' + item.id
         //     }
         // });
+
         let tableList = fileList.map(function(item){
             const regExt = /\.(\w+)$/;
             let filetypeMatch = item.filename.match(regExt);
@@ -304,7 +319,7 @@ class AcAttachment extends Component{
         let battchEnable = selectedFiles && selectedFiles.length > 0;
 
 		return (
-			<div>
+			<div className={className}>
 				<AcUpload
 					title={'附件管理'}
 					action={uploadUrl}
