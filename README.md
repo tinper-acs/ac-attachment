@@ -18,7 +18,6 @@ import 'ac-attachment/dist/ac-attachment.css';
 
 ```javascript
 <AcAttachment recordId='' groupname='' />
-            
 ```
 更多用法可以参考[demo](./demo/demolist)文件夹中的示例
 
@@ -48,4 +47,22 @@ fileMaxSize | `number` | 10 * 1024 * 1024 | 否 | 单个上传文件的大小上
 deleteConfirm | `boolean` | `true` | 否 | 删除时是否弹出确认框，默认弹出
 className | `string` |  | 否 | 附件容器的自定义class
 
+### 6. 自定义按钮
 
+允许传入自定义按钮，自定义按钮嵌套在附件组件内，以属性data-btn作为标识，不必添加事件，组件根据标识执行对应事件。
+按钮可以传入0至3个，未传递的使用内置的默认按钮，无标识的按钮无效。
+
+```javascript
+//传入定义按钮
+<AcAttachment recordId='' groupname=''>
+    <Button data-btn="upload" className="ml5" colors="primary" size='sm'>上传</Button>
+    <Button data-btn="download" className="ml5" colors="primary" size='sm'>下载</Button>
+    <Button data-btn="delete" className="ml5" colors="primary" size='sm'>删除</Button>
+</AcAttachment>
+```
+
+Attribute |  Value |  Description
+--------- |  ------ | -------------------
+data-btn  |  `upload` | 表示上传按钮
+data-btn  |  `download` | 表示下载按钮
+data-btn  |  `delete`   | 表示删除按钮
