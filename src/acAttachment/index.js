@@ -56,7 +56,7 @@ class AcAttachment extends Component{
         this.selectedFiles = [];
         this.fileTypeIcons = ['css','doc','html','javascript','jpg','pdf','png','ppt','xls','xml'];
         bindAll(this,['fGetTableColumns','fLoadFileList','fDeleteFile','fUploadSuccess','fUploadDelete',
-                      'fDownload','fDelete','fGetSelectedData']);
+                      'fDownload','fDelete','fGetSelectedData','fConClick']);
     }
     get uploadUrl(){
         return `${this.props.baseUrl}${this.props.uploadUrl}`;
@@ -143,7 +143,7 @@ class AcAttachment extends Component{
         });
     }
     fDownload(){
-        const downloadUrl = self.downloadUrl;
+        const downloadUrl = this.downloadUrl;
         //打开多个窗口，会被拦截，需要手动允许
         this.selectedFiles.forEach((item) => {
             window.open(downloadUrl + '?id=' + item.id);
@@ -251,19 +251,75 @@ class AcAttachment extends Component{
         }
         return aDate > bDate ? -1 : 1;
     }
-    renderDel(battchEnable){
+    fGetBtnByProp(prop){
+        const {children} = this.props;
+        let btn = null;
+        if(children){
+            React.Children.forEach(children,function(item){
+                if(item.props['data-btn'] == prop){
+                    btn = item;
+                }
+            });
+        }
+        return btn;
+    }
+    fGetBtnByType(type,disabled){
+        let btn = this.fGetBtnByProp(type);
+        if(!btn){
+            let map = {
+                'upload':  (
+                    <Button data-btn="upload" colors="primary" className="upload-btn" size='sm'>
+                        <Icon className="uf-upload"></Icon>上传
+                    </Button>
+                ),
+                'download': (
+                    <Button data-btn="download" colors="primary" className="upload-btn" size='sm'>
+                        <Icon className="uf-download"></Icon>下载
+                    </Button>
+                ),
+                'delete': (
+                    <Button data-btn="delete" colors="primary" className="upload-btn" size='sm'>
+                        <Icon className="uf-del"></Icon>删除
+                    </Button>
+                )
+            };
+            btn = map[type];
+        }
+        
+        if(type != 'upload'){
+            btn = React.cloneElement(btn,{disabled:disabled});
+        }
+        if(type == 'delete'){
+            btn = this.renderDel(btn);
+        }
+
+        return btn;
+    }
+    fConClick(ev){
+        const dataBtn = ev.target.getAttribute('data-btn');
+
+        switch(dataBtn){
+            case 'download':
+                this.fDownload();
+                break;
+            case 'delete':
+                if(!this.props.deleteConfirm){
+                    this.fDelete();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    renderDel(btn){
         let {deleteConfirm} = this.props;
         return (
             deleteConfirm ? 
                 (<Popconfirm trigger="click" placement="bottom" content={'确定要删除吗？'} onClose={this.fDelete}>
-                    <Button colors="primary" disabled={!battchEnable} className="upload-btn" size='sm'>
-                        <Icon className="uf uf-del">删除</Icon>
-                    </Button>
+                    {btn}
                 </Popconfirm>)
                 :
-                (<Button colors="primary" disabled={!battchEnable} className="upload-btn" size='sm' onClick={this.fDelete}>
-                    <Icon className="uf uf-del">删除</Icon>
-                </Button>)
+                ({btn})
         )
     }
 	render(){
@@ -316,10 +372,16 @@ class AcAttachment extends Component{
         //数据按照上传时间倒序
         tableList.sort(this.fCompareUploadTime);
         
+        //按钮禁用
         let battchEnable = selectedFiles && selectedFiles.length > 0;
+        let btnDisabled = !battchEnable;
+        //获取按钮
+        let btnUpload = this.fGetBtnByType('upload',btnDisabled);
+        let btnDownload = this.fGetBtnByType('download',btnDisabled);
+        let btnDelete = this.fGetBtnByType('delete',btnDisabled);
 
 		return (
-			<div className={className}>
+			<div className={className} onClick={this.fConClick}>
 				<AcUpload
 					title={'附件管理'}
 					action={uploadUrl}
@@ -333,14 +395,10 @@ class AcAttachment extends Component{
 					onSuccess={this.fUploadSuccess}
 					onDelete={this.fUploadDelete}
 				>
-                    <Button colors="primary" className="upload-btn" size='sm'>
-                        <Icon className="uf-upload">上传</Icon>
-                    </Button>
+                    {btnUpload}
                 </AcUpload>
-                <Button colors="primary" disabled={!battchEnable} className="upload-btn" size='sm' onClick={this.fDownload}>
-                    <Icon className="uf-download">下载</Icon>
-                </Button>
-                {this.renderDel(battchEnable)}
+                {btnDownload}
+                {btnDelete}
                 <MultiSelectSortTable
                     className='upload-table'
 					columns={columns}
@@ -348,7 +406,7 @@ class AcAttachment extends Component{
                     multiSelect={{type:'checkbox'}}
                     getSelectedDataFunc={this.fGetSelectedData}
 				/>
-			</div>
+			</div> 
 		)
 	}
 }
