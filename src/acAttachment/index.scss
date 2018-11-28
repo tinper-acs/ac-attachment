@@ -1,4 +1,24 @@
-.upload-btn{margin-left:10px;font-size:14px;}
+.upload-btn{
+    margin-left:10px;
+    background: #004898 !important;
+    color: #fff;
+    padding: 0 8px;
+    height: 26px;
+    line-height: 26px;
+    font-size: 14px;
+    border-radius: 3px;
+    min-width: 72px;
+    border: none;
+    i{
+        padding: 0;
+        line-height: 26px;
+        overflow: hidden;
+        float: left;
+    }
+    i:before{
+        margin-right: 8px;
+    }
+}
 .upload-btn:first-child{margin-left:0;}
 .upload-table{
     margin-top:10px;

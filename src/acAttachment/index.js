@@ -334,11 +334,11 @@ class AcAttachment extends Component{
 					onDelete={this.fUploadDelete}
 				>
                     <Button colors="primary" className="upload-btn" size='sm'>
-                        <Icon className="uf uf-upload">上传附件</Icon>
+                        <Icon className="uf-upload">上传</Icon>
                     </Button>
                 </AcUpload>
                 <Button colors="primary" disabled={!battchEnable} className="upload-btn" size='sm' onClick={this.fDownload}>
-                    <Icon className="uf uf-download">下载</Icon>
+                    <Icon className="uf-download">下载</Icon>
                 </Button>
                 {this.renderDel(battchEnable)}
                 <MultiSelectSortTable
