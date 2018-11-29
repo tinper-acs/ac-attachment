@@ -45,6 +45,7 @@ batchDeleteUrl | `string` | `/iuap-saas-filesystem-service/file/batchDeleteByIds
 fileType | `string`  |  | 否 |允许上传的文件类型, 详见 [input accept Attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-accept)
 fileMaxSize | `number` | 10 * 1024 * 1024 | 否 | 单个上传文件的大小上限，默认是10M
 deleteConfirm | `boolean` | `true` | 否 | 删除时是否弹出确认框，默认弹出
+multiple  | `boolean` | `true` | 否 | 是否支持一次多个文件上传，在文件选择框中，按shift或ctrl键，同时选择多个文件，点击确定即可
 className | `string` |  | 否 | 附件容器的自定义class
 
 ### 6. 自定义按钮
