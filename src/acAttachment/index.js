@@ -13,7 +13,7 @@ import Checkbox from 'bee-checkbox';
 import Popconfirm from 'bee-popconfirm';
 import Icon from 'bee-icon';
 import axios from 'axios';
-import './index.scss';
+import './index.less';
 
 let MultiSelectSortTable  = multiSelect(sort(Table, Icon), Checkbox);
 
@@ -31,7 +31,8 @@ const propTypes = {
     fileType: PropTypes.string,
     fileMaxSize: PropTypes.number,
     deleteConfirm: PropTypes.bool,
-    className: PropTypes.string
+    className: PropTypes.string,
+    multiple: PropTypes.bool
 }
 
 const defaultProps = {
@@ -42,7 +43,8 @@ const defaultProps = {
     downloadUrl: '/iuap-saas-filesystem-service/file/download',
     batchDeleteUrl: '/iuap-saas-filesystem-service/file/batchDeleteByIds',
     fileMaxSize: 10 * 1024 * 1024, //默认10M
-    deleteConfirm: true
+    deleteConfirm: true,
+    multiple: true
 }
 
 class AcAttachment extends Component{
@@ -334,7 +336,7 @@ class AcAttachment extends Component{
         fileList = fileList || [];
         selectedFiles = selectedFiles || [];
 
-        let {recordId,groupname,permission,url,fileType,fileMaxSize,className} = this.props;
+        let {recordId,groupname,permission,url,fileType,fileMaxSize,className,multiple} = this.props;
         
 		let uploadData = {
 			filepath: recordId,
@@ -393,7 +395,7 @@ class AcAttachment extends Component{
 					action={uploadUrl}
 					data={uploadData}
 					// defaultFileList={uploadList}
-					multiple={false}
+					multiple={multiple}
                     isView={false}
                     accept={fileType}
                     maxSize={fileMaxSize}
