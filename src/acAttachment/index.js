@@ -73,12 +73,18 @@ class AcAttachment extends Component{
     get batchDeleteUrl(){
         return `${this.props.baseUrl}${this.props.batchDeleteUrl}`;
     }
+    componentWillReceiveProps(nextProps){
+        //单据Id变化刷新文件列表
+        if(nextProps.recordId && nextProps.recordId != this.props.recordId){
+            this.fLoadFileList(nextProps);
+        }
+    }
 	componentDidMount(){
 		this.fLoadFileList();
 	}
-	fLoadFileList(){
+	fLoadFileList(nextProps){
         const self = this;
-        const {recordId,groupname,tenant} = self.props;
+        const {recordId,groupname,tenant} = nextProps || self.props;
         const params = {
             filepath: recordId,
             groupname: groupname,
