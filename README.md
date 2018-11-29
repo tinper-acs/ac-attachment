@@ -1,5 +1,8 @@
 ## ac-attachment
 
+[![npm version](https://img.shields.io/npm/v/ac-attachment.svg)](https://www.npmjs.com/package/ac-attachment)
+[![NPM downloads](http://img.shields.io/npm/dt/ac-attachment.svg?style=flat)](https://npmjs.org/package/ac-attachment)
+
 ### 1. 简介
 
 附件上传组件(基于应用平台)
