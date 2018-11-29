@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import {bindAll,isNumber} from './common';
 import AcUpload from 'ac-upload';
 import 'ac-upload/build/ac-upload.css';
+
 import Table from 'bee-table';
 import multiSelect from "bee-table/build/lib/multiSelect.js";
 import sort from 'bee-table/build/lib/sort.js';
@@ -32,7 +33,8 @@ const propTypes = {
     fileMaxSize: PropTypes.number,
     deleteConfirm: PropTypes.bool,
     className: PropTypes.string,
-    multiple: PropTypes.bool
+    multiple: PropTypes.bool,
+    onError: PropTypes.func
 }
 
 const defaultProps = {
@@ -58,7 +60,7 @@ class AcAttachment extends Component{
         this.selectedFiles = [];
         this.fileTypeIcons = ['css','doc','html','javascript','jpg','pdf','png','ppt','xls','xml'];
         bindAll(this,['fGetTableColumns','fLoadFileList','fDeleteFile','fUploadSuccess','fUploadDelete',
-                      'fDownload','fDelete','fGetSelectedData','fConClick']);
+                      'fDownload','fDelete','fGetSelectedData','fConClick','beforeUpload','fValidateFileType']);
     }
     get uploadUrl(){
         return `${this.props.baseUrl}${this.props.uploadUrl}`;
@@ -87,26 +89,28 @@ class AcAttachment extends Component{
 	fLoadFileList(nextProps){
         const self = this;
         const {recordId,groupname,tenant} = nextProps || self.props;
-        const params = {
-            filepath: recordId,
-            groupname: groupname,
-        }
-        if(tenant){
-            params['tenant'] = tenant;
-        }
-
-        return axios({
-            url: self.queryUrl,
-            params: params
-        }).then(function(res){
-            if(res.data){
-                self.setState({
-                    fileList: res.data.data
-                })
+        if(recordId && groupname){
+            const params = {
+                filepath: recordId,
+                groupname: groupname,
             }
-        }).catch(function (error) {
-            console.log(error);
-        });
+            if(tenant){
+                params['tenant'] = tenant;
+            }
+    
+            return axios({
+                url: self.queryUrl,
+                params: params
+            }).then(function(res){
+                if(res.data){
+                    self.setState({
+                        fileList: res.data.data
+                    })
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
     }
     fDeleteFile(id){
 		const self = this;
@@ -330,6 +334,45 @@ class AcAttachment extends Component{
                 ({btn})
         )
     }
+    fValidateFileType(fileType){
+        const accept = this.props.fileType;
+        if(!accept){
+            return true;
+        }
+        const accepts = accept.split(',');
+        let valid = false;
+        //若直接包含，则允许，若有前面类型相同，后为*的，也是允许
+        for(let i=0,len=accepts.length;i<len;i++){
+            let item = accepts[i];
+            if(item == fileType){
+                valid = true;
+                break;
+            }
+            if(item.indexOf('*') > -1){
+                const aAccept = item.split('/');
+                const aType = fileType.split('/');
+                if(aAccept.length > 1 && aType.length > 1){
+                    valid = aAccept[0] == aType[0] && aAccept[1] == '*';
+                }
+            }
+        }
+
+        return valid;
+    }
+    beforeUpload(file){
+        let maxSize = this.props.fileMaxSize;
+
+        if(file.size > maxSize){
+            alert('文件大小超出限制');
+            return false;
+        }
+        if(!this.fValidateFileType(file.type)){
+            alert('文件类型超出限制');
+            return false;
+        }
+
+        return true;
+    }
 	render(){
 		const columns = this.fGetTableColumns();
         let {fileList,selectedFiles} = this.state;
@@ -399,7 +442,8 @@ class AcAttachment extends Component{
                     isView={false}
                     accept={fileType}
                     maxSize={fileMaxSize}
-					onError={(err) => alert('上传报错了')}
+                    beforeUpload={this.beforeUpload}
+					onError={(err) => {console.log(err);alert('上传报错了')}}
 					onSuccess={this.fUploadSuccess}
 					onDelete={this.fUploadDelete}
 				>
