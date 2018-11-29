@@ -66,3 +66,14 @@ Attribute |  Value |  Description
 data-btn  |  `upload` | 表示上传按钮
 data-btn  |  `download` | 表示下载按钮
 data-btn  |  `delete`   | 表示删除按钮
+
+### 7. 文件列表刷新
+
+组件在recordId发生变化，会自动刷新文件列表，也可以手动刷新文件列表，用法如下：
+
+```javascript
+<AcAttachment ref={(attach) => {this.attach = attach}} recordId='' groupname='' />
+
+//手动刷新文件列表
+this.attach.fLoadFileList();
+```
