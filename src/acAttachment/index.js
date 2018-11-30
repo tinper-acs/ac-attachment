@@ -49,7 +49,8 @@ const defaultProps = {
     batchDeleteUrl: '/iuap-saas-filesystem-service/file/batchDeleteByIds',
     fileMaxSize: 10 * 1024 * 1024, //默认10M
     deleteConfirm: true,
-    multiple: true
+    multiple: true,
+    fileNum: 999
 }
 
 class AcAttachment extends Component{
