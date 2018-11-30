@@ -30,11 +30,14 @@ const propTypes = {
 	deleteUrl: PropTypes.string,
     downloadUrl: PropTypes.string,
     fileType: PropTypes.string,
+    onFileTypeOver: PropTypes.func,
     fileMaxSize: PropTypes.number,
+    onFileSizeOver: PropTypes.func,
+    fileNum: PropTypes.number,
+    onFileNumOver: PropTypes.func,
     deleteConfirm: PropTypes.bool,
     className: PropTypes.string,
-    multiple: PropTypes.bool,
-    onError: PropTypes.func
+    multiple: PropTypes.bool
 }
 
 const defaultProps = {
@@ -360,15 +363,27 @@ class AcAttachment extends Component{
         return valid;
     }
     beforeUpload(file){
-        let maxSize = this.props.fileMaxSize;
-
-        if(file.size > maxSize){
+        //文件大小检查
+        if(file.size > this.props.fileMaxSize){
             alert('文件大小超出限制');
+            this.props.onFileSizeOver && this.props.onFileSizeOver(file);
             return false;
         }
+        //文件类型检查
         if(!this.fValidateFileType(file.type)){
             alert('文件类型超出限制');
+            this.props.onFileTypeOver && this.props.onFileTypeOver(file);
             return false;
+        }
+        //文件数量检查
+        let {fileNum} = this.props;
+        if(fileNum){
+            let fileList = this.state.fileList || [];
+            if(fileList.length + 1 > parseInt(fileNum)){
+                alert('文件数量超出限制');
+                this.props.onFileNumOver && this.props.onFileNumOver(file);
+                return false;
+            }
         }
 
         return true;
