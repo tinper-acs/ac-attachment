@@ -46,12 +46,22 @@ deleteUrl | `string` | `/iuap-saas-filesystem-service/file/delete` | 否 | 应�
 downloadUrl | `string` | `/iuap-saas-filesystem-service/file/download` | 否 | 应用平台下载附件的地址
 batchDeleteUrl | `string` | `/iuap-saas-filesystem-service/file/batchDeleteByIds` | 否 | 应用平台批量删除附件地址
 fileType | `string`  |  | 否 |允许上传的文件类型, 使用MIME类型限制文件类型。例如：txt文档类型为text/plain, png图片类型为image/png。可以使用\*通配符，image/\*代表所有图片类型。多个文件类型使用逗号隔开，例如：'image/\*, text/plain'。详见 [File Type](https://developer.mozilla.org/zh-CN/docs/Web/API/File/type), [MIME类型](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types)
-fileMaxSize | `number` | 10 * 1024 * 1024 | 否 | 单个上传文件的大小上限，默认是10M
+fileMaxSize | `number` | `10 * 1024 * 1024` | 否 | 单个上传文件的大小上限，默认是10M
+fileNum | `number` | `999` | 否 | 上传文件的总数量限制
 deleteConfirm | `boolean` | `true` | 否 | 删除时是否弹出确认框，默认弹出
 multiple  | `boolean` | `true` | 否 | 是否支持一次多个文件上传，在文件选择框中，按shift或ctrl键，同时选择多个文件，点击确定即可
 className | `string` |  | 否 | 附件容器的自定义class
 
-### 6. 自定义按钮
+### 6. 事件
+
+Name | Parameter | Description
+--------- | ---- | -----------------
+onFileTypeOver | `file`，当前上传的文件对象 | 文件类型超出限制回调
+onFileSizeOver | `file`，当前上传的文件对象 | 文件大小超出限制回调
+onFileNumOver | `file`，当前上传的文件对象 | 文件数量超出限制回调
+
+
+### 7. 自定义按钮
 
 允许传入自定义按钮，自定义按钮嵌套在附件组件内，以属性data-btn作为标识，不必添加事件，组件根据标识执行对应事件。
 按钮可以传入0至3个，未传递的使用内置的默认按钮，无标识的按钮无效。
@@ -71,7 +81,7 @@ data-btn  |  `upload` | 表示上传按钮
 data-btn  |  `download` | 表示下载按钮
 data-btn  |  `delete`   | 表示删除按钮
 
-### 7. 文件列表刷新
+### 8. 文件列表刷新
 
 组件在recordId发生变化，会自动刷新文件列表，也可以手动刷新文件列表，用法如下：
 
