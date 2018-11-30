@@ -16,7 +16,7 @@ const CARETUP = <i className="uf uf-arrow-up"></i>;
 
 
 import Demo1 from "./demolist/Demo1";
-var DemoArray = [{"example":<Demo1 />,"title":" AcAttachment","code":"/**\n *\n * @title AcAttachment\n * @description AcAttachment基本示例\n *\n */\n\nimport React, { Component } from 'react';\nimport AcAttachment from '../../src/index';\n\nclass Demo1 extends Component {\n    constructor(props){\n        super(props);\n        this.state = {\n            \n        };\n    }\n    render () {\n        // let {} = this.state;\n\n        return (\n            <div className=\"demoPadding demo1\">\n                <AcAttachment></AcAttachment>\n            </div>\n        )\n    }\n}\n\n\n","desc":" AcAttachment基本示例"}]
+var DemoArray = [{"example":<Demo1 />,"title":" AcAttachment","code":"/**\n *\n * @title AcAttachment\n * @description AcAttachment基本示例\n *\n */\n\nimport React, { Component } from 'react';\nimport AcAttachment from '../../src/index';\n\nclass Demo1 extends Component {\n    constructor(props){\n        super(props);\n        this.state = {\n            \n        };\n    }\n    render () {\n\n        return (\n            <div className=\"demoPadding demo1\">\n                <AcAttachment recordId='' groupname='yddemo'></AcAttachment>\n            </div>\n        )\n    }\n}\n\n\n","desc":" AcAttachment基本示例"}]
 
 
 class Demo extends Component {

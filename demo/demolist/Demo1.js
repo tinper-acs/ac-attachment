@@ -16,11 +16,10 @@ class Demo1 extends Component {
         };
     }
     render () {
-        // let {} = this.state;
 
         return (
             <div className="demoPadding demo1">
-                <AcAttachment></AcAttachment>
+                <AcAttachment recordId='' groupname='yddemo'></AcAttachment>
             </div>
         )
     }

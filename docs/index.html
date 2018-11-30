@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title></title>
+    <title>ac-attachment</title>
     <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.css"/>
     <link type="text/css" rel="stylesheet" href="assets/css/bootstrap-responsive.css"/>
     <link type="text/css" rel="stylesheet" href="assets/css/pilcrow.css"/>
@@ -14,10 +14,237 @@
   <div class="container-fluid">
     <div class="row-fluid">
       <div class="span3"><ul class="nav nav-list">
+    <li class="sidebar-header-2"><a href="#ac-attachment">ac-attachment</a></li>
+    <li class="sidebar-header-3"><a href="#1.-简介">1. 简介</a></li>
+    <li class="sidebar-header-3"><a href="#2.-安装">2. 安装</a></li>
+    <li class="sidebar-header-3"><a href="#3.-使用">3. 使用</a></li>
+    <li class="sidebar-header-3"><a href="#4.-预览">4. 预览</a></li>
+    <li class="sidebar-header-3"><a href="#5.-参数">5. 参数</a></li>
+    <li class="sidebar-header-3"><a href="#6.-事件">6. 事件</a></li>
+    <li class="sidebar-header-3"><a href="#7.-自定义按钮">7. 自定义按钮</a></li>
+    <li class="sidebar-header-3"><a href="#8.-文件列表刷新">8. 文件列表刷新</a></li>
 </ul>
       </div>
-      <div class="span9 main"><p>### </p>
-      </div>
+      <div class="span9 main"><h2 id="ac-attachment">ac-attachment</h2>
+<p><a href="https://www.npmjs.com/package/ac-attachment"><img src="https://img.shields.io/npm/v/ac-attachment.svg" alt="npm version"></a>
+<a href="https://npmjs.org/package/ac-attachment"><img src="http://img.shields.io/npm/dt/ac-attachment.svg?style=flat" alt="NPM downloads"></a></p>
+<h3 id="1.-简介">1. 简介</h3>
+<p>附件上传组件(基于应用平台)</p>
+<h3 id="2.-安装">2. 安装</h3>
+<pre class="hljs"><code>npm install ac-attachment -S</code></pre><h3 id="3.-使用">3. 使用</h3>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> AcAttachment <span class="hljs-keyword">from</span> <span class="hljs-string">'ac-attachment'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'ac-attachment/dist/ac-attachment.css'</span>;</code></pre><pre class="hljs"><code>&lt;AcAttachment recordId=<span class="hljs-string">''</span> groupname=<span class="hljs-string">''</span> /&gt;</code></pre><p>更多用法可以参考<a href="./demo/demolist">demo</a>文件夹中的示例</p>
+<blockquote>
+<p>注：组件基于应用平台的附件接口，接口需要登录，否则无法进行附件相关的任何操作</p>
+</blockquote>
+<h3 id="4.-预览">4. 预览</h3>
+<h3 id="5.-参数">5. 参数</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>recordId</td>
+<td><code>string</code></td>
+<td></td>
+<td>是</td>
+<td>单据相关的唯一标示，一般包含单据ID，如果有多个附件的时候由业务自己制定规则 </td>
+</tr>
+<tr>
+<td>groupname</td>
+<td><code>string</code></td>
+<td></td>
+<td>是</td>
+<td>分组名</td>
+</tr>
+<tr>
+<td>permission</td>
+<td><code>string</code></td>
+<td></td>
+<td>否</td>
+<td>Oss权限(read，private，full),read是可读=公有，private=私有，当这个参数不传的时候会默认private</td>
+</tr>
+<tr>
+<td>tenant</td>
+<td><code>string</code></td>
+<td></td>
+<td>否</td>
+<td>附件查询使用，租户id，不写会自动从系统获取</td>
+</tr>
+<tr>
+<td>url</td>
+<td><code>string</code></td>
+<td></td>
+<td>否</td>
+<td>里传true或false。为true，则返回附件的连接地址存到数据库中；如果isencrypt设置为true，url不能设置为true否则不能上传，提示：对于加密文件不能返回url，返回了也无法访问</td>
+</tr>
+<tr>
+<td>isencrypt</td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+<td>否</td>
+<td>是否加密，默认false不加密</td>
+</tr>
+<tr>
+<td>baseUrl</td>
+<td><code>string</code></td>
+<td></td>
+<td>否</td>
+<td>应用平台的地址(IP地址或域名)</td>
+</tr>
+<tr>
+<td>uploadUrl</td>
+<td><code>string</code></td>
+<td><code>/iuap-saas-filesystem-service/file/upload</code></td>
+<td>否</td>
+<td>应用平台上传附件的地址</td>
+</tr>
+<tr>
+<td>queryUrl</td>
+<td><code>string</code></td>
+<td><code>/iuap-saas-filesystem-service/file/query</code></td>
+<td>否</td>
+<td>应用平台查询附件的地址</td>
+</tr>
+<tr>
+<td>deleteUrl</td>
+<td><code>string</code></td>
+<td><code>/iuap-saas-filesystem-service/file/delete</code></td>
+<td>否</td>
+<td>应用平台删除单个附件的地址</td>
+</tr>
+<tr>
+<td>downloadUrl</td>
+<td><code>string</code></td>
+<td><code>/iuap-saas-filesystem-service/file/download</code></td>
+<td>否</td>
+<td>应用平台下载附件的地址</td>
+</tr>
+<tr>
+<td>batchDeleteUrl</td>
+<td><code>string</code></td>
+<td><code>/iuap-saas-filesystem-service/file/batchDeleteByIds</code></td>
+<td>否</td>
+<td>应用平台批量删除附件地址</td>
+</tr>
+<tr>
+<td>fileType</td>
+<td><code>string</code></td>
+<td></td>
+<td>否</td>
+<td>允许上传的文件类型, 使用MIME类型限制文件类型。例如：txt文档类型为text/plain, png图片类型为image/png。可以使用*通配符，image/*代表所有图片类型。多个文件类型使用逗号隔开，例如：&#39;image/*, text/plain&#39;。详见 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/File/type">File Type</a>, <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types">MIME类型</a></td>
+</tr>
+<tr>
+<td>fileMaxSize</td>
+<td><code>number</code></td>
+<td><code>10 * 1024 * 1024</code></td>
+<td>否</td>
+<td>单个上传文件的大小上限，默认是10M</td>
+</tr>
+<tr>
+<td>fileNum</td>
+<td><code>number</code></td>
+<td><code>999</code></td>
+<td>否</td>
+<td>上传文件的总数量限制</td>
+</tr>
+<tr>
+<td>deleteConfirm</td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>否</td>
+<td>删除时是否弹出确认框，默认弹出</td>
+</tr>
+<tr>
+<td>multiple</td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>否</td>
+<td>是否支持一次多个文件上传，在文件选择框中，按shift或ctrl键，同时选择多个文件，点击确定即可</td>
+</tr>
+<tr>
+<td>className</td>
+<td><code>string</code></td>
+<td></td>
+<td>否</td>
+<td>附件容器的自定义class</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6.-事件">6. 事件</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>onFileTypeOver</td>
+<td><code>file</code>，当前上传的文件对象</td>
+<td>文件类型超出限制回调</td>
+</tr>
+<tr>
+<td>onFileSizeOver</td>
+<td><code>file</code>，当前上传的文件对象</td>
+<td>文件大小超出限制回调</td>
+</tr>
+<tr>
+<td>onFileNumOver</td>
+<td><code>file</code>，当前上传的文件对象</td>
+<td>文件数量超出限制回调</td>
+</tr>
+</tbody>
+</table>
+<h3 id="7.-自定义按钮">7. 自定义按钮</h3>
+<p>允许传入自定义按钮，自定义按钮嵌套在附件组件内，以属性data-btn作为标识，不必添加事件，组件根据标识执行对应事件。
+按钮可以传入0至3个，未传递的使用内置的默认按钮，无标识的按钮无效。</p>
+<pre class="hljs"><code><span class="hljs-comment">//传入定义按钮</span>
+&lt;AcAttachment recordId=<span class="hljs-string">''</span> groupname=<span class="hljs-string">''</span>&gt;
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">data-btn</span>=<span class="hljs-string">"upload"</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"ml5"</span> <span class="hljs-attr">colors</span>=<span class="hljs-string">"primary"</span> <span class="hljs-attr">size</span>=<span class="hljs-string">'sm'</span>&gt;</span>上传<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+    &lt;Button data-btn=<span class="hljs-string">"download"</span> className=<span class="hljs-string">"ml5"</span> colors=<span class="hljs-string">"primary"</span> size=<span class="hljs-string">'sm'</span>&gt;下载&lt;<span class="hljs-regexp">/Button&gt;
+    &lt;Button data-btn="delete" className="ml5" colors="primary" size='sm'&gt;删除&lt;/</span>Button&gt;
+<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">AcAttachment</span>&gt;</span></span></code></pre><table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data-btn</td>
+<td><code>upload</code></td>
+<td>表示上传按钮</td>
+</tr>
+<tr>
+<td>data-btn</td>
+<td><code>download</code></td>
+<td>表示下载按钮</td>
+</tr>
+<tr>
+<td>data-btn</td>
+<td><code>delete</code></td>
+<td>表示删除按钮</td>
+</tr>
+</tbody>
+</table>
+<h3 id="8.-文件列表刷新">8. 文件列表刷新</h3>
+<p>组件在recordId发生变化，会自动刷新文件列表，也可以手动刷新文件列表，用法如下：</p>
+<pre class="hljs"><code>&lt;AcAttachment ref={(attach) =&gt; {<span class="hljs-keyword">this</span>.attach = attach}} recordId=<span class="hljs-string">''</span> groupname=<span class="hljs-string">''</span> /&gt;
+
+<span class="hljs-comment">//手动刷新文件列表</span>
+<span class="hljs-keyword">this</span>.attach.fLoadFileList();</code></pre>      </div>
     </div>
   </div>
 
