@@ -231,9 +231,9 @@ class AcAttachment extends Component{
                     return 1;
                 }
             },
-            { title: '上传人', dataIndex: 'uploader', key: 'uploader', width: 100, 
+            { title: '上传人', dataIndex: 'uploaderName', key: 'uploaderName', width: 100, 
                 sorter:function(a,b){
-                    return a.uploader.localeCompare(b.uploader);
+                    return a.uploaderName.localeCompare(b.uploaderName);
                 }
             },
             { title: '上传时间', dataIndex: 'uploadtime', key: 'uploadtime', width: 200,
@@ -431,7 +431,7 @@ class AcAttachment extends Component{
             return {
                 ...item,
                 key: item.id,
-                uploader: '',
+                uploaderName: item.uploaderName,
                 filetype: filetype,
                 _checked: _checked               
             }
