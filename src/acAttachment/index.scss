@@ -23,6 +23,11 @@
 .upload-btn:first-child{margin-left:0;}
 .upload-table{
     margin-top:10px;
+    th{padding: 10px 8px !important;}
+    td{
+        height: 32px !important;
+        padding: 0 8px;
+    }
 }
 .u-checkbox {
     top: -5px;
@@ -35,6 +40,7 @@
     display: inline-block;
     width:30px;
     height:30px;
+    vertical-align: -4px;
 }
 .upload-filetype-css{
     background-image:url('./icon/css.svg');

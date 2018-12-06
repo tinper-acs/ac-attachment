@@ -468,6 +468,7 @@ class AcAttachment extends Component{
                 {btnDownload}
                 {btnDelete}
                 <MultiSelectSortTable
+                    bordered
                     className='upload-table'
 					columns={columns}
                     data={tableList}
