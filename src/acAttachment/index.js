@@ -13,6 +13,7 @@ import Button from 'bee-button';
 import Checkbox from 'bee-checkbox';
 import Popconfirm from 'bee-popconfirm';
 import Icon from 'bee-icon';
+import Message from 'bee-message';
 import axios from 'axios';
 import './index.scss';
 
@@ -366,13 +367,13 @@ class AcAttachment extends Component{
     beforeUpload(file){
         //文件大小检查
         if(file.size > this.props.fileMaxSize){
-            alert('文件大小超出限制');
+            Message.create({content: '文件大小超出限制', color: 'warning'});
             this.props.onFileSizeOver && this.props.onFileSizeOver(file);
             return false;
         }
         //文件类型检查
         if(!this.fValidateFileType(file.type)){
-            alert('文件类型超出限制');
+            Message.create({content: '文件类型超出限制', color: 'warning'});
             this.props.onFileTypeOver && this.props.onFileTypeOver(file);
             return false;
         }
@@ -381,7 +382,7 @@ class AcAttachment extends Component{
         if(fileNum){
             let fileList = this.state.fileList || [];
             if(fileList.length + 1 > parseInt(fileNum)){
-                alert('文件数量超出限制');
+                Message.create({content: '文件数量超出限制', color: 'warning'});
                 this.props.onFileNumOver && this.props.onFileNumOver(file);
                 return false;
             }
@@ -447,6 +448,8 @@ class AcAttachment extends Component{
         let btnDownload = this.fGetBtnByType('download',btnDisabled);
         let btnDelete = this.fGetBtnByType('delete',btnDisabled);
 
+        const emptyFunc = () => <i className="uf uf-nodata" style={{fontSize:'60px'}}></i>;
+
 		return (
 			<div className={className} onClick={this.fConClick}>
 				<AcUpload
@@ -459,7 +462,7 @@ class AcAttachment extends Component{
                     accept={fileType}
                     maxSize={fileMaxSize}
                     beforeUpload={this.beforeUpload}
-					onError={(err) => {console.log(err);alert('上传报错了')}}
+					onError={(err) => {console.log(err);Message.create({content: '上传报错了', color: 'danger'});}}
 					onSuccess={this.fUploadSuccess}
 					onDelete={this.fUploadDelete}
 				>
@@ -474,6 +477,7 @@ class AcAttachment extends Component{
                     data={tableList}
                     multiSelect={{type:'checkbox'}}
                     getSelectedDataFunc={this.fGetSelectedData}
+                    emptyText={emptyFunc}
 				/>
 			</div> 
 		)

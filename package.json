@@ -91,6 +91,7 @@
     "axios": "^0.18.0",
     "bee-checkbox": "^1.2.6",
     "bee-icon": "^1.0.5",
+    "bee-message": "^1.0.12",
     "bee-table": "^1.5.8",
     "classnames": "^2.2.6"
   }
