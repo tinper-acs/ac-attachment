@@ -37,7 +37,7 @@ module.exports = {
       },
       
       {
-        test: /\.(png|jpg|jpeg|gif)(\?.+)?$/,
+        test: /\.(png|jpg|jpeg|gif|svg)(\?.+)?$/,
         exclude: /favicon\.png$/,
         use: [{
           loader: "url-loader",
@@ -48,7 +48,7 @@ module.exports = {
         }]
       },
       {
-        test: /\.(eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
+        test: /\.(eot|ttf|woff|woff2|svgz)(\?.+)?$/,
         use: [{
           loader: "file-loader",
           options: {
