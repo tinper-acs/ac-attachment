@@ -68,19 +68,19 @@ class AcAttachment extends Component{
                       'fDownload','fDelete','fGetSelectedData','fConClick','beforeUpload','fValidateFileType']);
     }
     get uploadUrl(){
-        return `${this.props.baseUrl}${this.props.uploadUrl}`;
+        return `${this.props.baseUrl}${this.props.uploadUrl}?t=${new Date().getTime()}`;
     }
     get queryUrl(){
-        return `${this.props.baseUrl}${this.props.queryUrl}`;
+        return `${this.props.baseUrl}${this.props.queryUrl}?t=${new Date().getTime()}`;
     }
     get deleteUrl(){
-        return `${this.props.baseUrl}${this.props.deleteUrl}`;
+        return `${this.props.baseUrl}${this.props.deleteUrl}?t=${new Date().getTime()}`;
     }
     get downloadUrl(){
-        return `${this.props.baseUrl}${this.props.downloadUrl}`;
+        return `${this.props.baseUrl}${this.props.downloadUrl}?t=${new Date().getTime()}`;
     }
     get batchDeleteUrl(){
-        return `${this.props.baseUrl}${this.props.batchDeleteUrl}`;
+        return `${this.props.baseUrl}${this.props.batchDeleteUrl}?t=${new Date().getTime()}`;
     }
     componentWillReceiveProps(nextProps){
         //单据Id变化刷新文件列表
@@ -90,7 +90,7 @@ class AcAttachment extends Component{
     }
 	componentDidMount(){
 		this.fLoadFileList();
-	}
+    }
 	fLoadFileList(nextProps){
         const self = this;
         const {recordId,groupname,tenant} = nextProps || self.props;
@@ -163,7 +163,7 @@ class AcAttachment extends Component{
         const downloadUrl = this.downloadUrl;
         //打开多个窗口，会被拦截，需要手动允许
         this.selectedFiles.forEach((item) => {
-            window.open(downloadUrl + '?id=' + item.id);
+            window.open(downloadUrl + '&id=' + item.id);
         });
     }
     fDelete(){
@@ -189,7 +189,7 @@ class AcAttachment extends Component{
             { title: '', dataIndex: '', key: '', width: 50, 
               render(text, record, index) {
                 return (
-                  <a href={downloadUrl + '?id=' + record.id} target="_blank">
+                  <a href={downloadUrl + '&id=' + record.id} target="_blank">
                     <Icon className="uf-cloud-down"></Icon>
                   </a>
                 );
@@ -414,7 +414,7 @@ class AcAttachment extends Component{
         //     return {
         //         id: item.id,
         //         fileName: item.filename,
-        //         accessAddress: downloadUrl + '?id=' + item.id
+        //         accessAddress: downloadUrl + '&id=' + item.id
         //     }
         // });
 
