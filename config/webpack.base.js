@@ -37,7 +37,7 @@ module.exports = {
       },
       
       {
-        test: /\.(png|jpg|jpeg|gif|svg)(\?.+)?$/,
+        test: /\.(png|jpg|jpeg|gif)(\?.+)?$/,
         exclude: /favicon\.png$/,
         use: [{
           loader: "url-loader",
@@ -55,6 +55,15 @@ module.exports = {
             name: "[name].[hash:8].[ext]"
           }
         }]
+      },
+      {
+        test: /\.svg/,
+        use: {
+            loader: 'svg-url-loader',
+            options: {
+              limit: 10000
+            }
+        }
       }
     ]
   },
