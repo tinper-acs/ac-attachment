@@ -332,7 +332,7 @@ class AcAttachment extends Component{
         let {deleteConfirm} = this.props;
         return (
             deleteConfirm ? 
-                (<Popconfirm trigger="click" placement="bottom" content={'确定要删除吗？'} onClose={this.fDelete}>
+                (<Popconfirm trigger="click" placement="bottom" content={'确定要删除吗？'} onClose={this.fDelete} animation={false}>
                     {btn}
                 </Popconfirm>)
                 :
