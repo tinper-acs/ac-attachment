@@ -48,9 +48,9 @@ batchDeleteUrl | `string` | `/iuap-saas-filesystem-service/file/batchDeleteByIds
 fileType | `string`  |  | 否 |允许上传的文件类型, 使用MIME类型限制文件类型。例如：txt文档类型为text/plain, png图片类型为image/png。可以使用\*通配符，image/\*代表所有图片类型。多个文件类型使用逗号隔开，例如：'image/\*, text/plain'。详见 [File Type](https://developer.mozilla.org/zh-CN/docs/Web/API/File/type), [MIME类型](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types)
 fileMaxSize | `number` | `10` | 否 | 单个上传文件的大小上限，默认是10M，单位是M
 fileNum | `number` | `999` | 否 | 上传文件的总数量限制
-deleteConfirm | `boolean` | `true` | 否 | 删除时是否弹出确认框，默认弹出
 multiple  | `boolean` | `true` | 否 | 是否支持一次多个文件上传，在文件选择框中，按shift或ctrl键，同时选择多个文件，点击确定即可
 className | `string` |  | 否 | 附件容器的自定义class
+
 
 ### 6. 事件
 
@@ -59,6 +59,7 @@ Name | Parameter | Description
 onFileTypeOver | `file`，当前上传的文件对象 | 文件类型超出限制回调
 onFileSizeOver | `file`，当前上传的文件对象 | 文件大小超出限制回调
 onFileNumOver | `file`，当前上传的文件对象 | 文件数量超出限制回调
+onDelete | `attach` | 参数attach为附件组件实例，调用attach.fDelete()，可以调起接口删除附件
 
 
 ### 7. 自定义按钮
@@ -90,4 +91,24 @@ data-btn  |  `delete`   | 表示删除按钮
 
 //手动刷新文件列表
 this.attach.fLoadFileList();
+```
+
+### 9. 自定义弹框删除文件
+
+```javascript
+<AcAttachment ref={(attach) => {this.attach = attach}} recordId='' groupname='' />
+
+//手动删除文件
+this.attach.fDelete();
+```
+
+```javascript
+//自定义弹出框删除文件
+<AcAttachment recordId='' groupname='' 
+    onDelete={(attach) => {
+        if(confirm('确定删除记录吗？')){
+            attach.fDelete();
+        }
+    }}
+/>
 ```

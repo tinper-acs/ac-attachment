@@ -36,9 +36,9 @@ const propTypes = {
     onFileSizeOver: PropTypes.func,
     fileNum: PropTypes.number,
     onFileNumOver: PropTypes.func,
-    deleteConfirm: PropTypes.bool,
     className: PropTypes.string,
-    multiple: PropTypes.bool
+    multiple: PropTypes.bool,
+    onDelete: PropTypes.func
 }
 
 const defaultProps = {
@@ -49,7 +49,6 @@ const defaultProps = {
     downloadUrl: '/iuap-saas-filesystem-service/file/download',
     batchDeleteUrl: '/iuap-saas-filesystem-service/file/batchDeleteByIds',
     fileMaxSize: 10, //默认10M
-    deleteConfirm: true,
     multiple: true,
     fileNum: 999
 }
@@ -323,7 +322,7 @@ class AcAttachment extends Component{
                 this.fDownload();
                 break;
             case 'delete':
-                if(!this.props.deleteConfirm){
+                if(!this.props.onDelete){
                     this.fDelete();
                 }
                 break;
@@ -332,14 +331,10 @@ class AcAttachment extends Component{
         }
     }
     renderDel(btn){
-        let {deleteConfirm} = this.props;
+        let {onDelete} = this.props;
+        btn = onDelete ? React.cloneElement(btn,{onClick:(ev) => {onDelete(this)}}) : btn;
         return (
-            deleteConfirm ? 
-                (<Popconfirm trigger="click" placement="bottom" content={'确定要删除吗？'} onClose={this.fDelete} animation={false}>
-                    {btn}
-                </Popconfirm>)
-                :
-                ({btn})
+            btn
         )
     }
     fValidateFileType(fileType){
