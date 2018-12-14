@@ -48,7 +48,7 @@ const defaultProps = {
 	deleteUrl: '/iuap-saas-filesystem-service/file/delete',
     downloadUrl: '/iuap-saas-filesystem-service/file/download',
     batchDeleteUrl: '/iuap-saas-filesystem-service/file/batchDeleteByIds',
-    fileMaxSize: 10 * 1024 * 1024, //默认10M
+    fileMaxSize: 10, //默认10M
     deleteConfirm: true,
     multiple: true,
     fileNum: 999
@@ -81,6 +81,9 @@ class AcAttachment extends Component{
     }
     get batchDeleteUrl(){
         return `${this.props.baseUrl}${this.props.batchDeleteUrl}?t=${new Date().getTime()}`;
+    }
+    get fileMaxSize(){
+        return this.props.fileMaxSize * 1024 * 1024;
     }
     componentWillReceiveProps(nextProps){
         //单据Id变化刷新文件列表
@@ -266,7 +269,7 @@ class AcAttachment extends Component{
         if(aDate == bDate){
             return 0;
         }
-        return aDate > bDate ? -1 : 1;
+        return aDate > bDate ? 1 : -1;
     }
     fGetBtnByProp(prop){
         const {children} = this.props;
@@ -366,8 +369,8 @@ class AcAttachment extends Component{
     }
     beforeUpload(file){
         //文件大小检查
-        if(file.size > this.props.fileMaxSize){
-            Message.create({content: '文件大小超出限制', color: 'warning'});
+        if(file.size > this.fileMaxSize){
+            Message.create({content: `文件大小超出限制(${this.props.fileMaxSize}M)`, color: 'warning'});
             this.props.onFileSizeOver && this.props.onFileSizeOver(file);
             return false;
         }
@@ -381,8 +384,9 @@ class AcAttachment extends Component{
         let {fileNum} = this.props;
         if(fileNum){
             let fileList = this.state.fileList || [];
-            if(fileList.length + 1 > parseInt(fileNum)){
-                Message.create({content: '文件数量超出限制', color: 'warning'});
+            fileNum = parseInt(fileNum);
+            if(fileList.length + 1 > fileNum){
+                Message.create({content: `文件数量超出限制(${fileNum}个)`, color: 'warning'});
                 this.props.onFileNumOver && this.props.onFileNumOver(file);
                 return false;
             }
@@ -396,8 +400,8 @@ class AcAttachment extends Component{
         fileList = fileList || [];
         selectedFiles = selectedFiles || [];
 
-        let {recordId,groupname,permission,url,fileType,fileMaxSize,className,multiple} = this.props;
-        
+        let {recordId,groupname,permission,url,fileType,className,multiple} = this.props;
+        let fileMaxSize = this.fileMaxSize;
 		let uploadData = {
 			filepath: recordId,
 			groupname: groupname
