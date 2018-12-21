@@ -38,6 +38,7 @@ const propTypes = {
     onFileNumOver: PropTypes.func,
     className: PropTypes.string,
     multiple: PropTypes.bool,
+    disabled: PropTypes.bool,
     onDelete: PropTypes.func
 }
 
@@ -50,7 +51,8 @@ const defaultProps = {
     batchDeleteUrl: '/iuap-saas-filesystem-service/file/batchDeleteByIds',
     fileMaxSize: 10, //默认10M
     multiple: true,
-    fileNum: 999
+    fileNum: 999,
+    disabled: false
 }
 
 class AcAttachment extends Component{
@@ -304,10 +306,17 @@ class AcAttachment extends Component{
             };
             btn = map[type];
         }
-        
-        if(type != 'upload'){
-            btn = React.cloneElement(btn,{disabled:disabled});
+        //外部禁用，则全部按钮禁用 
+        if(this.props.disabled){
+            btn = React.cloneElement(btn,{disabled:true});
         }
+        //外部不禁用，则有选择记录时候控制删除和下载按钮的disabled
+        else{
+            if(type != 'upload'){
+                btn = React.cloneElement(btn,{disabled:disabled});
+            }
+        }
+       
         if(type == 'delete'){
             btn = this.renderDel(btn);
         }
