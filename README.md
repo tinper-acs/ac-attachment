@@ -49,6 +49,7 @@ fileType | `string`  |  | 否 |允许上传的文件类型, 使用MIME类型限�
 fileMaxSize | `number` | `10` | 否 | 单个上传文件的大小上限，默认是10M，单位是M
 fileNum | `number` | `999` | 否 | 上传文件的总数量限制
 multiple  | `boolean` | `true` | 否 | 是否支持一次多个文件上传，在文件选择框中，按shift或ctrl键，同时选择多个文件，点击确定即可
+disabled  | `boolean` | `false` | 否 | 上传，下载，删除按钮是否禁用
 className | `string` |  | 否 | 附件容器的自定义class
 
 
