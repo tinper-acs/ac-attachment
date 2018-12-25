@@ -1,4 +1,4 @@
-
+/*! ac-attachment v__VERSION__ */
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
@@ -496,6 +496,7 @@ class AcAttachment extends Component{
 
 AcAttachment.propTypes = propTypes;
 AcAttachment.defaultProps = defaultProps;
+AcAttachment.version = '__VERSION__';
 
 
 export default AcAttachment;
