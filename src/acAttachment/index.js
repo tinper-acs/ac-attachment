@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
@@ -11,7 +12,6 @@ import multiSelect from "bee-table/build/lib/multiSelect.js";
 import sort from 'bee-table/build/lib/sort.js';
 import Button from 'bee-button';
 import Checkbox from 'bee-checkbox';
-import Popconfirm from 'bee-popconfirm';
 import Icon from 'bee-icon';
 import Message from 'bee-message';
 import axios from 'axios';
@@ -158,10 +158,12 @@ class AcAttachment extends Component{
         self.fLoadFileList();
     }
     fUploadDelete(data){
-        const file = data;
-        this.fDeleteFile(file.id).then(() => {
-            this.fLoadFileList(); 
-        });
+        const files = data.response.data;
+        if(files && files.length){
+            this.fDeleteFile(files[0].id).then(() => {
+                this.fLoadFileList(); 
+            });
+        }
     }
     fDownload(){
         const downloadUrl = this.downloadUrl;
