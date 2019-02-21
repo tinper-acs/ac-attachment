@@ -51,6 +51,7 @@ fileNum | `number` | `999` | 否 | 上传文件的总数量限制
 multiple  | `boolean` | `true` | 否 | 是否支持一次多个文件上传，在文件选择框中，按shift或ctrl键，同时选择多个文件，点击确定即可
 disabled  | `boolean` | `false` | 否 | 上传，下载，删除按钮是否禁用
 className | `string` |  | 否 | 附件容器的自定义class
+checkDuplicate | `boolean` | `true` | 否 | 文件上传是否检测文件名重复 
 
 
 ### 6. 事件
