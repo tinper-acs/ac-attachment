@@ -39,7 +39,8 @@ const propTypes = {
     className: PropTypes.string,
     multiple: PropTypes.bool,
     disabled: PropTypes.bool,
-    onDelete: PropTypes.func
+    onDelete: PropTypes.func,
+    checkDuplicate: PropTypes.bool
 }
 
 const defaultProps = {
@@ -52,7 +53,8 @@ const defaultProps = {
     fileMaxSize: 10, //默认10M
     multiple: true,
     fileNum: 999,
-    disabled: false
+    disabled: false,
+    checkDuplicate: true
 }
 
 class AcAttachment extends Component{
@@ -394,6 +396,14 @@ class AcAttachment extends Component{
             if(fileList.length + 1 > fileNum){
                 Message.create({content: `文件数量超出限制(${fileNum}个)`, color: 'warning'});
                 this.props.onFileNumOver && this.props.onFileNumOver(file);
+                return false;
+            }
+        }
+        //文件重复检测
+        if(this.props.checkDuplicate){
+            let fileList = this.state.fileList || [];
+            if(fileList.some(item => item.filename == file.name)){
+                Message.create({content: `存在重复的文件${file.name}，请重新选择文件`, color: 'warning'});
                 return false;
             }
         }
