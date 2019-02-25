@@ -12,3 +12,8 @@ export function type(obj){
 export function isNumber(obj){
     return type(obj) == '[object Number]';
 }
+
+export function clearHtml(str){
+    let reg = /<\/?.+?\/?>/g;
+    return str.replace(reg,'');
+}

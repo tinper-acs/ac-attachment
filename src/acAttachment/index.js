@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {bindAll,isNumber} from './common';
+import {bindAll,isNumber,clearHtml} from './common';
 import AcUpload from 'ac-upload';
 import 'ac-upload/build/ac-upload.css';
 
@@ -15,7 +15,34 @@ import Checkbox from 'bee-checkbox';
 import Icon from 'bee-icon';
 import Message from 'bee-message';
 import axios from 'axios';
+import zh from 'react-intl/locale-data/zh';
+import en from 'react-intl/locale-data/en';
+import zh_CN from './locale/zh_CN.js';
+import en_US from './locale/en_US.js';
+import zh_TW from './locale/zh_TW.js'; 
+import {IntlProvider,addLocaleData,FormattedMessage,injectIntl} from 'react-intl';
+import cookie from 'react-cookies';
 import './index.scss';
+
+//加载国际化文件
+addLocaleData([...en,...zh]);
+
+let messages = {};
+messages['en-US'] = en_US;
+messages['zh-CN'] = zh_CN;
+messages['zh-TW'] = zh_TW;
+messages['en_US'] = en_US;
+messages['zh_CN'] = zh_CN;
+messages['zh_TW'] = zh_TW;
+messages['zh'] = zh_CN;
+messages['en'] = en_US;
+
+let localeMap = {
+    'en-US': 'en',
+    'en_US': 'en',
+    'zh-CN': 'zh',
+    'zh_CN': 'zh'
+}
 
 let MultiSelectSortTable  = multiSelect(sort(Table, Icon), Checkbox);
 
@@ -40,7 +67,8 @@ const propTypes = {
     multiple: PropTypes.bool,
     disabled: PropTypes.bool,
     onDelete: PropTypes.func,
-    checkDuplicate: PropTypes.bool
+    checkDuplicate: PropTypes.bool,
+    locale: PropTypes.string
 }
 
 const defaultProps = {
@@ -203,12 +231,12 @@ class AcAttachment extends Component{
                 );
               }
             },
-            { title: '附件名称', dataIndex: 'filename', key: 'filename', width: 200, 
+            { title: <FormattedMessage id="intl.col.attachName" />, dataIndex: 'filename', key: 'filename', width: 200, 
                 sorter:function(a,b){
                     return a.filename.localeCompare(b.filename);
                 }
             },
-            { title: '文件类型', dataIndex: 'filetype', key: 'filetype', width: 100, render(text, record, index) {
+            { title: <FormattedMessage id="intl.col.fileType" />, dataIndex: 'filetype', key: 'filetype', width: 100, render(text, record, index) {
                 let ext = record.filetype;
                 let filetypeCls = 'upload-filetype-' + ext;
                 let hasIcon = self.fileTypeIcons.indexOf(ext) > -1;
@@ -220,7 +248,7 @@ class AcAttachment extends Component{
                 );
               }
             },
-            { title: '文件大小', dataIndex: 'filesize', key: 'filesize', width: 100, 
+            { title: <FormattedMessage id="intl.col.fileSize" />, dataIndex: 'filesize', key: 'filesize', width: 100, 
                 sorter: function(a,b){
                     const reg = /^([\d.]+)([\w()]+)$/;
                     const matchA = a.filesize.match(reg),
@@ -240,12 +268,12 @@ class AcAttachment extends Component{
                     return 1;
                 }
             },
-            { title: '上传人', dataIndex: 'uploaderName', key: 'uploaderName', width: 100, 
+            { title: <FormattedMessage id="intl.col.uploaderName" />, dataIndex: 'uploaderName', key: 'uploaderName', width: 100, 
                 sorter:function(a,b){
                     return a.uploaderName.localeCompare(b.uploaderName);
                 }
             },
-            { title: '上传时间', dataIndex: 'uploadtime', key: 'uploadtime', width: 200,
+            { title: <FormattedMessage id="intl.col.uploadTime" />, dataIndex: 'uploadtime', key: 'uploadtime', width: 200,
                 sorter:function(a,b){
                     return self.fCompareUploadTime(a,b);
                 }
@@ -294,17 +322,17 @@ class AcAttachment extends Component{
             let map = {
                 'upload':  (
                     <Button data-btn="upload" colors="primary" className="upload-btn" size='sm'>
-                        <Icon className="uf-upload"></Icon>上传
+                        <Icon className="uf-upload"></Icon><FormattedMessage id="intl.btn.upload" />
                     </Button>
                 ),
                 'download': (
                     <Button data-btn="download" colors="primary" className="upload-btn" size='sm'>
-                        <Icon className="uf-download"></Icon>下载
+                        <Icon className="uf-download"></Icon><FormattedMessage id="intl.btn.download" />
                     </Button>
                 ),
                 'delete': (
                     <Button data-btn="delete" colors="primary" className="upload-btn" size='sm'>
-                        <Icon className="uf-del"></Icon>删除
+                        <Icon className="uf-del"></Icon><FormattedMessage id="intl.btn.delete" />
                     </Button>
                 )
             };
@@ -375,16 +403,22 @@ class AcAttachment extends Component{
 
         return valid;
     }
-    beforeUpload(file){
+    beforeUpload(file,msg){
         //文件大小检查
         if(file.size > this.fileMaxSize){
-            Message.create({content: `文件大小超出限制(${this.props.fileMaxSize}M)`, color: 'warning'});
+            Message.create({
+                content: msg['fileSize'], 
+                color: 'warning'
+            });
             this.props.onFileSizeOver && this.props.onFileSizeOver(file);
             return false;
         }
         //文件类型检查
         if(!this.fValidateFileType(file.type)){
-            Message.create({content: '文件类型超出限制', color: 'warning'});
+            Message.create({
+                content: msg['fileType'], 
+                color: 'warning'
+            });
             this.props.onFileTypeOver && this.props.onFileTypeOver(file);
             return false;
         }
@@ -394,7 +428,10 @@ class AcAttachment extends Component{
             let fileList = this.state.fileList || [];
             fileNum = parseInt(fileNum);
             if(fileList.length + 1 > fileNum){
-                Message.create({content: `文件数量超出限制(${fileNum}个)`, color: 'warning'});
+                Message.create({
+                    content: msg['fileNum'],
+                    color: 'warning'
+                });
                 this.props.onFileNumOver && this.props.onFileNumOver(file);
                 return false;
             }
@@ -403,12 +440,18 @@ class AcAttachment extends Component{
         if(this.props.checkDuplicate){
             let fileList = this.state.fileList || [];
             if(fileList.some(item => item.filename == file.name)){
-                Message.create({content: `存在重复的文件${file.name}，请重新选择文件`, color: 'warning'});
+                Message.create({
+                    content: msg['fileDuplicate'], 
+                    color: 'warning'
+                });
                 return false;
             }
         }
 
         return true;
+    }
+    getMsg(id){
+        return clearHtml(document.getElementById(id).innerHTML);
     }
 	render(){
 		const columns = this.fGetTableColumns();
@@ -469,37 +512,58 @@ class AcAttachment extends Component{
         let btnDelete = this.fGetBtnByType('delete',btnDisabled);
 
         const emptyFunc = () => <i className="uf uf-nodata" style={{fontSize:'60px'}}></i>;
+        let localeSrc = this.props.locale || cookie.load('u_locale') || 'zh'; 
+        let locale = localeMap[localeSrc] || localeSrc;
 
 		return (
-			<div className={className} onClick={this.fConClick}>
-				<AcUpload
-					title={'附件管理'}
-					action={uploadUrl}
-					data={uploadData}
-					// defaultFileList={uploadList}
-					multiple={multiple}
-                    isView={false}
-                    accept={fileType}
-                    maxSize={fileMaxSize}
-                    beforeUpload={this.beforeUpload}
-					onError={(err) => {console.log(err);Message.create({content: '上传报错了', color: 'danger'});}}
-					onSuccess={this.fUploadSuccess}
-					onDelete={this.fUploadDelete}
-				>
-                    {btnUpload}
-                </AcUpload>
-                {btnDownload}
-                {btnDelete}
-                <MultiSelectSortTable
-                    bordered
-                    className='upload-table'
-					columns={columns}
-                    data={tableList}
-                    multiSelect={{type:'checkbox'}}
-                    getSelectedDataFunc={this.fGetSelectedData}
-                    emptyText={emptyFunc}
-				/>
-			</div> 
+            <IntlProvider locale={locale} messages={messages[localeSrc]}>
+                <div className={className} onClick={this.fConClick}>
+                    <AcUpload
+                        title={<FormattedMessage id="intl.upload.title" />}
+                        action={uploadUrl}
+                        data={uploadData}
+                        // defaultFileList={uploadList}
+                        multiple={multiple}
+                        isView={false}
+                        accept={fileType}
+                        maxSize={fileMaxSize}
+                        beforeUpload={(file) => this.beforeUpload(file,{
+                            fileSize: this.getMsg('fileSize'),
+                            fileType: this.getMsg('fileType'),
+                            fileNum:  this.getMsg('fileNum'),
+                            fileDuplicate: this.getMsg('fileDuplicate')
+                        })}
+                        onError={(err) => {
+                            console.log(err);
+                            Message.create({
+                                content: this.getMsg('uploadError'), 
+                                color: 'danger'
+                            });}}
+                        onSuccess={this.fUploadSuccess}
+                        onDelete={this.fUploadDelete}
+                    >
+                        {btnUpload}
+                    </AcUpload>
+                    {btnDownload}
+                    {btnDelete}
+                    <MultiSelectSortTable
+                        bordered
+                        className='upload-table'
+                        columns={columns}
+                        data={tableList}
+                        multiSelect={{type:'checkbox'}}
+                        getSelectedDataFunc={this.fGetSelectedData}
+                        emptyText={emptyFunc}
+                    />
+                    <div style={{opacity:0}}>
+                        <div id="fileSize"><FormattedMessage id="intl.msg.fileSize" values={{fileSize: this.props.fileMaxSize}} /></div>
+                        <div id="fileType"><FormattedMessage id="intl.msg.fileType" /></div>
+                        <div id="fileNum"><FormattedMessage id="intl.msg.fileNum" values={{fileNum: this.props.fileNum}} /></div>
+                        <div id="fileDuplicate"><FormattedMessage id="intl.msg.fileDuplicate" /></div>
+                        <div id="uploadError"><FormattedMessage id="intl.upload.error" /></div>
+                    </div>
+                </div> 
+            </IntlProvider>
 		)
 	}
 }
@@ -510,3 +574,4 @@ AcAttachment.version = '__VERSION__';
 
 
 export default AcAttachment;
+ 
