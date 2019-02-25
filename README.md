@@ -52,6 +52,7 @@ multiple  | `boolean` | `true` | 否 | 是否支持一次多个文件上传，�
 disabled  | `boolean` | `false` | 否 | 上传，下载，删除按钮是否禁用
 className | `string` |  | 否 | 附件容器的自定义class
 checkDuplicate | `boolean` | `true` | 否 | 文件上传是否检测文件名重复 
+locale | `string` | `zh` | 否 | 组件语言类型，默认是简体中文，目前支持英文(en或en_US)，简体中文(zh_CN)，繁体中文(zh_TW)
 
 
 ### 6. 事件
