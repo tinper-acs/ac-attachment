@@ -557,7 +557,7 @@ class AcAttachment extends Component{
                         getSelectedDataFunc={this.fGetSelectedData}
                         emptyText={emptyFunc}
                     />
-                    <div style={{opacity:0}}>
+                    <div style={{opacity:0,position:'absolute',width:0,height:0}}>
                         <div id="fileSize"><FormattedMessage id="intl.msg.fileSize" values={{fileSize: this.props.fileMaxSize}} /></div>
                         <div id="fileType"><FormattedMessage id="intl.msg.fileType" /></div>
                         <div id="fileNum"><FormattedMessage id="intl.msg.fileNum" values={{fileNum: this.props.fileNum}} /></div>
