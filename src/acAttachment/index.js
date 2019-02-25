@@ -28,20 +28,22 @@ import './index.scss';
 addLocaleData([...en,...zh]);
 
 let messages = {};
-messages['en-US'] = en_US;
-messages['zh-CN'] = zh_CN;
-messages['zh-TW'] = zh_TW;
-messages['en_US'] = en_US;
-messages['zh_CN'] = zh_CN;
-messages['zh_TW'] = zh_TW;
-messages['zh'] = zh_CN;
 messages['en'] = en_US;
+messages['en-US'] = en_US;
+messages['en_US'] = en_US;
+messages['zh'] = zh_CN;
+messages['zh-CN'] = zh_CN;
+messages['zh_CN'] = zh_CN;
+messages['zh-TW'] = zh_TW;
+messages['zh_TW'] = zh_TW;
 
 let localeMap = {
     'en-US': 'en',
     'en_US': 'en',
     'zh-CN': 'zh',
-    'zh_CN': 'zh'
+    'zh_CN': 'zh',
+    'zh-TW': 'zh',
+    'zh_TW': 'zh'
 }
 
 let MultiSelectSortTable  = multiSelect(sort(Table, Icon), Checkbox);
