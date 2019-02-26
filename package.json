@@ -1,6 +1,6 @@
 {
   "name": "ac-attachment",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -89,7 +89,7 @@
     "prop-types": "^15.6.0"
   },
   "dependencies": {
-    "ac-upload": "0.1.6",
+    "ac-upload": "0.1.7",
     "axios": "^0.18.0",
     "bee-checkbox": "^1.2.6",
     "bee-icon": "^1.0.5",
