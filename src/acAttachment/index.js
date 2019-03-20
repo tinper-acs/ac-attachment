@@ -93,11 +93,12 @@ class AcAttachment extends Component{
 		this.state = {
             fileList: [],
             action: props.uploadUrl,
-            selectedFiles: []
+            selectedFiles: [],
+            tableList: []
         }
         this.selectedFiles = [];
         this.fileTypeIcons = ['css','doc','html','javascript','jpg','pdf','png','ppt','xls','xml'];
-        bindAll(this,['fGetTableColumns','fLoadFileList','fDeleteFile','fUploadSuccess','fUploadDelete',
+        bindAll(this,['fGetTableColumns','fLoadFileList','fDeleteFile','fUploadSuccess','fUploadDelete','fGetTableList',
                       'fDownload','fDelete','fGetSelectedData','fConClick','beforeUpload','fValidateFileType']);
     }
     get uploadUrl(){
@@ -138,20 +139,48 @@ class AcAttachment extends Component{
             if(tenant){
                 params['tenant'] = tenant;
             }
-    
+
             return axios({
                 url: self.queryUrl,
                 params: params
             }).then(function(res){
                 if(res.data){
+                    let fileList = res.data.data || [];
                     self.setState({
-                        fileList: res.data.data
+                        fileList: fileList,
+                        tableList: self.fGetTableList(fileList)
                     })
                 }
             }).catch(function (error) {
                 console.log(error);
             });
         }
+    }
+    fGetTableList(fileList){
+        let {selectedFiles} = this.state;
+        let tableList = fileList.map(function(item){
+            const regExt = /\.(\w+)$/;
+            let filetypeMatch = item.filename.match(regExt);
+            let filetype = filetypeMatch ? filetypeMatch[1] : '';
+            //修复table的checkbox不选中bug
+            let _checked = false;
+            selectedFiles.forEach((sf) => {
+                if(sf.id == item.id){
+                    _checked = sf._checked;
+                }
+            })
+            return {
+                ...item,
+                key: item.id,
+                uploaderName: item.uploaderName,
+                filetype: filetype,
+                _checked: _checked               
+            }
+        });
+        //数据按照上传时间倒序
+        tableList.sort(this.fCompareUploadTime);
+
+        return tableList;
     }
     fDeleteFile(id){
 		const self = this;
@@ -455,9 +484,12 @@ class AcAttachment extends Component{
     getMsg(id){
         return clearHtml(document.getElementById(id).innerHTML);
     }
+    emptyFunc(){
+        return <i className="uf uf-nodata" style={{fontSize:'60px'}}></i>;
+    }
 	render(){
 		const columns = this.fGetTableColumns();
-        let {fileList,selectedFiles} = this.state;
+        let {fileList,selectedFiles,tableList} = this.state;
         fileList = fileList || [];
         selectedFiles = selectedFiles || [];
 
@@ -475,35 +507,6 @@ class AcAttachment extends Component{
         }
 
         let uploadUrl = this.uploadUrl;
-        // let uploadList = fileList.map(function(item){
-        //     return {
-        //         id: item.id,
-        //         fileName: item.filename,
-        //         accessAddress: downloadUrl + '&id=' + item.id
-        //     }
-        // });
-
-        let tableList = fileList.map(function(item){
-            const regExt = /\.(\w+)$/;
-            let filetypeMatch = item.filename.match(regExt);
-            let filetype = filetypeMatch ? filetypeMatch[1] : '';
-            //修复table的checkbox不选中bug
-            let _checked = false;
-            selectedFiles.forEach((sf) => {
-                if(sf.id == item.id){
-                    _checked = sf._checked;
-                }
-            })
-            return {
-                ...item,
-                key: item.id,
-                uploaderName: item.uploaderName,
-                filetype: filetype,
-                _checked: _checked               
-            }
-        });
-        //数据按照上传时间倒序
-        tableList.sort(this.fCompareUploadTime);
         
         //按钮禁用
         let battchEnable = selectedFiles && selectedFiles.length > 0;
@@ -513,7 +516,6 @@ class AcAttachment extends Component{
         let btnDownload = this.fGetBtnByType('download',btnDisabled);
         let btnDelete = this.fGetBtnByType('delete',btnDisabled);
 
-        const emptyFunc = () => <i className="uf uf-nodata" style={{fontSize:'60px'}}></i>;
         let localeSrc = this.props.locale || cookie.load('u_locale') || 'zh'; 
         let locale = localeMap[localeSrc] || localeSrc;
 
@@ -524,7 +526,6 @@ class AcAttachment extends Component{
                         title={<FormattedMessage id="intl.upload.title" />}
                         action={uploadUrl}
                         data={uploadData}
-                        // defaultFileList={uploadList}
                         multiple={multiple}
                         isView={false}
                         accept={fileType}
@@ -555,7 +556,7 @@ class AcAttachment extends Component{
                         data={tableList}
                         multiSelect={{type:'checkbox'}}
                         getSelectedDataFunc={this.fGetSelectedData}
-                        emptyText={emptyFunc}
+                        emptyText={this.emptyFunc}
                     />
                     <div style={{opacity:0,position:'absolute',width:0,height:0}}>
                         <div id="fileSize"><FormattedMessage id="intl.msg.fileSize" values={{fileSize: this.props.fileMaxSize}} /></div>
