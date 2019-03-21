@@ -90,7 +90,7 @@ data-btn  |  `delete`   | 表示删除按钮
 组件在recordId发生变化，会自动刷新文件列表，也可以手动刷新文件列表，用法如下：
 
 ```javascript
-<AcAttachment ref={(attach) => {this.attach = attach}} recordId='' groupname='' />
+<AcAttachment ref={(c) => {this.attach = c.attach}} recordId='' groupname='' />
 
 //手动刷新文件列表
 this.attach.fLoadFileList();
@@ -99,7 +99,7 @@ this.attach.fLoadFileList();
 ### 9. 自定义弹框删除文件
 
 ```javascript
-<AcAttachment ref={(attach) => {this.attach = attach}} recordId='' groupname='' />
+<AcAttachment ref={(c) => {this.attach = c.attach}} recordId='' groupname='' />
 
 //手动删除文件
 this.attach.fDelete();
