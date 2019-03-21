@@ -376,9 +376,12 @@ class AcAttachment extends Component{
         return btn;
     }
     fConClick(ev){
-        const dataBtn = ev.target.getAttribute('data-btn');
+        let btnType = ev.target.getAttribute('data-btn');
+        if(!btnType){
+            btnType = ev.target.parentNode.getAttribute('data-btn');
+        }
 
-        switch(dataBtn){
+        switch(btnType){
             case 'download':
                 this.fDownload();
                 break;
