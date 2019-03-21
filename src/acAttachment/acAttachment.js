@@ -67,12 +67,15 @@ class AcAttachment extends Component{
             fileList: [],
             action: props.uploadUrl,
             selectedFiles: [],
-            tableList: []
+            tableList: [],
+            btnUpload: this.fGetBtnByType('upload',false),
+            btnDownload: this.fGetBtnByType('download',true),
+            btnDelete: this.fGetBtnByType('delete',true)
         }
         this.selectedFiles = [];
         this.fileTypeIcons = ['css','doc','html','javascript','jpg','pdf','png','ppt','xls','xml'];
-        bindAll(this,['fGetTableColumns','fLoadFileList','fDeleteFile','fUploadSuccess','fUploadDelete','fGetTableList',
-                      'fDownload','fDelete','fGetSelectedData','fConClick','beforeUpload','fValidateFileType']);
+        bindAll(this,['fGetTableColumns','fLoadFileList','fDeleteFile','fUploadSuccess','fUploadDelete','fGetTableList','fGetUploadData',
+                      'fDownload','fDelete','onSelectData','fConClick','beforeUpload','fValidateFileType','fSetSelectedFiles']);
     }
     get uploadUrl(){
         return `${this.props.baseUrl}${this.props.uploadUrl}?t=${new Date().getTime()}`;
@@ -210,16 +213,29 @@ class AcAttachment extends Component{
         const ids = this.selectedFiles.map((item) => item.id);
         this.fBatchDeleteFiles(ids).then(() => {
             this.fLoadFileList();
-            this.setState({
-                selectedFiles: []
-            })
+            this.fSetSelectedFiles([]);
         });
     }
-    fGetSelectedData(data){
+    onSelectData(data){
         this.selectedFiles = data;
+        this.fSetSelectedFiles(data);
+    }
+    fSetSelectedFiles(selectedFiles){
         this.setState({
-            selectedFiles: data
-        })
+            selectedFiles: selectedFiles || []
+        });
+        //按钮禁用
+        let battchEnable = selectedFiles && selectedFiles.length > 0;
+        let btnDisabled = !battchEnable;
+        //获取按钮
+        let btnUpload = this.fGetBtnByType('upload',btnDisabled);
+        let btnDownload = this.fGetBtnByType('download',btnDisabled);
+        let btnDelete = this.fGetBtnByType('delete',btnDisabled);
+        this.setState({
+            btnUpload: btnUpload,
+            btnDownload: btnDownload,
+            btnDelete: btnDelete
+        });
     }
 	fGetTableColumns(){
         const self = this;
@@ -461,15 +477,10 @@ class AcAttachment extends Component{
     emptyFunc(){
         return <i className="uf uf-nodata" style={{fontSize:'60px'}}></i>;
     }
-	render(){
-		const columns = this.fGetTableColumns();
-        let {fileList,selectedFiles,tableList} = this.state;
-        fileList = fileList || [];
-        selectedFiles = selectedFiles || [];
+    fGetUploadData(){
+        let {recordId,groupname,permission,url} = this.props;
 
-        let {recordId,groupname,permission,url,fileType,className,multiple,intl} = this.props;
-        let fileMaxSize = this.fileMaxSize;
-		let uploadData = {
+        let uploadData = {
 			filepath: recordId,
 			groupname: groupname
         };
@@ -480,16 +491,16 @@ class AcAttachment extends Component{
             uploadData['url'] = url;
         }
 
+        return uploadData;
+    }
+	render(){
+		const columns = this.fGetTableColumns();
+        let {fileList,selectedFiles,tableList,btnUpload,btnDownload,btnDelete} = this.state;
+        let {fileType,className,multiple,intl} = this.props;
+        let fileMaxSize = this.fileMaxSize;
         let uploadUrl = this.uploadUrl;
+		let uploadData = this.fGetUploadData();
         
-        //按钮禁用
-        let battchEnable = selectedFiles && selectedFiles.length > 0;
-        let btnDisabled = !battchEnable;
-        //获取按钮
-        let btnUpload = this.fGetBtnByType('upload',btnDisabled);
-        let btnDownload = this.fGetBtnByType('download',btnDisabled);
-        let btnDelete = this.fGetBtnByType('delete',btnDisabled);
-
 		return (
                 <div className={className} onClick={this.fConClick}>
                     <AcUpload
@@ -520,7 +531,7 @@ class AcAttachment extends Component{
                         columns={columns}
                         data={tableList}
                         multiSelect={{type:'checkbox'}}
-                        getSelectedDataFunc={this.fGetSelectedData}
+                        getSelectedDataFunc={this.onSelectData}
                         emptyText={this.emptyFunc}
                     />
                 </div> 
