@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>ac-attachment</title>
+    <title>按钮 AcButton</title>
     <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.css"/>
     <link type="text/css" rel="stylesheet" href="assets/css/bootstrap-responsive.css"/>
     <link type="text/css" rel="stylesheet" href="assets/css/pilcrow.css"/>
@@ -14,40 +14,39 @@
   <div class="container-fluid">
     <div class="row-fluid">
       <div class="span3"><ul class="nav nav-list">
-    <li class="sidebar-header-2"><a href="#ac-attachment">ac-attachment</a></li>
-    <li class="sidebar-header-3"><a href="#1.-简介">1. 简介</a></li>
-    <li class="sidebar-header-3"><a href="#2.-安装">2. 安装</a></li>
-    <li class="sidebar-header-3"><a href="#3.-使用">3. 使用</a></li>
-    <li class="sidebar-header-3"><a href="#4.-预览">4. 预览</a></li>
-    <li class="sidebar-header-3"><a href="#5.-参数">5. 参数</a></li>
-    <li class="sidebar-header-3"><a href="#6.-事件">6. 事件</a></li>
-    <li class="sidebar-header-3"><a href="#7.-自定义按钮">7. 自定义按钮</a></li>
-    <li class="sidebar-header-3"><a href="#8.-文件列表刷新">8. 文件列表刷新</a></li>
-    <li class="sidebar-header-3"><a href="#9.-自定义弹框删除文件">9. 自定义弹框删除文件</a></li>
+    <li class="sidebar-header-1"><a href="#按钮-acbutton">按钮 AcButton</a></li>
+    <li class="sidebar-header-2"><a href="#何时使用">何时使用</a></li>
+    <li class="sidebar-header-2"><a href="#如何使用">如何使用</a></li>
+    <li class="sidebar-header-2"><a href="#代码演示">代码演示</a></li>
+    <li class="sidebar-header-2"><a href="#api">API</a></li>
+    <li class="sidebar-header-3"><a href="#参数">参数</a></li>
+    <li class="sidebar-header-3"><a href="#事件">事件</a></li>
+    <li class="sidebar-header-2"><a href="#注意事项">注意事项</a></li>
+    <li class="sidebar-header-2"><a href="#文件列表刷新">文件列表刷新</a></li>
+    <li class="sidebar-header-3"><a href="#自定义弹框删除文件">自定义弹框删除文件</a></li>
+    <li class="sidebar-header-2"><a href="#更新日志">更新日志</a></li>
 </ul>
       </div>
-      <div class="span9 main"><h2 id="ac-attachment">ac-attachment</h2>
-<p><a href="https://www.npmjs.com/package/ac-attachment"><img src="https://img.shields.io/npm/v/ac-attachment.svg" alt="npm version"></a>
-<a href="https://npmjs.org/package/ac-attachment"><img src="http://img.shields.io/npm/dt/ac-attachment.svg?style=flat" alt="NPM downloads"></a></p>
-<h3 id="1.-简介">1. 简介</h3>
-<p>附件上传组件(基于应用平台)</p>
-<h3 id="2.-安装">2. 安装</h3>
-<pre class="hljs"><code>npm install ac-attachment -S</code></pre><h3 id="3.-使用">3. 使用</h3>
-<pre class="hljs"><code><span class="hljs-keyword">import</span> AcAttachment <span class="hljs-keyword">from</span> <span class="hljs-string">'ac-attachment'</span>;
-<span class="hljs-keyword">import</span> <span class="hljs-string">'ac-attachment/dist/ac-attachment.css'</span>;</code></pre><pre class="hljs"><code>&lt;AcAttachment recordId=<span class="hljs-string">''</span> groupname=<span class="hljs-string">''</span> /&gt;</code></pre><p>更多用法可以参考<a href="./demo/demolist">demo</a>文件夹中的示例</p>
-<blockquote>
-<p>注：组件基于应用平台的附件接口，接口需要登录，否则无法进行附件相关的任何操作</p>
-</blockquote>
-<h3 id="4.-预览">4. 预览</h3>
-<h3 id="5.-参数">5. 参数</h3>
+      <div class="span9 main"><h1 id="按钮-acbutton">按钮 AcButton</h1>
+<h2 id="何时使用">何时使用</h2>
+<p>代替原生按钮</p>
+<h2 id="如何使用">如何使用</h2>
+<pre class="hljs"><code><span class="hljs-built_in">npm</span> install ac-attachment -S
+
+<span class="hljs-keyword">import</span> AcAttachment <span class="hljs-keyword">from</span> <span class="hljs-string">'ac-attachment'</span>;
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">'ac-attachment/dist/ac-attachment.css'</span>;
+</code></pre><h2 id="代码演示">代码演示</h2>
+<h2 id="api">API</h2>
+<h3 id="参数">参数</h3>
 <table>
 <thead>
 <tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Default</th>
-<th>Required</th>
-<th>Description</th>
+<th>名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>是否必填</th>
+<th>描述</th>
 </tr>
 </thead>
 <tbody>
@@ -193,13 +192,13 @@
 </tr>
 </tbody>
 </table>
-<h3 id="6.-事件">6. 事件</h3>
+<h3 id="事件">事件</h3>
 <table>
 <thead>
 <tr>
-<th>Name</th>
-<th>Parameter</th>
-<th>Description</th>
+<th>名称</th>
+<th>类型</th>
+<th>描述</th>
 </tr>
 </thead>
 <tbody>
@@ -225,46 +224,13 @@
 </tr>
 </tbody>
 </table>
-<h3 id="7.-自定义按钮">7. 自定义按钮</h3>
-<p>允许传入自定义按钮，自定义按钮嵌套在附件组件内，以属性data-btn作为标识，不必添加事件，组件根据标识执行对应事件。
-按钮可以传入0至3个，未传递的使用内置的默认按钮，无标识的按钮无效。</p>
-<pre class="hljs"><code><span class="hljs-comment">//传入定义按钮</span>
-&lt;AcAttachment recordId=<span class="hljs-string">''</span> groupname=<span class="hljs-string">''</span>&gt;
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">data-btn</span>=<span class="hljs-string">"upload"</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"ml5"</span> <span class="hljs-attr">colors</span>=<span class="hljs-string">"primary"</span> <span class="hljs-attr">size</span>=<span class="hljs-string">'sm'</span>&gt;</span>上传<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
-    &lt;Button data-btn=<span class="hljs-string">"download"</span> className=<span class="hljs-string">"ml5"</span> colors=<span class="hljs-string">"primary"</span> size=<span class="hljs-string">'sm'</span>&gt;下载&lt;<span class="hljs-regexp">/Button&gt;
-    &lt;Button data-btn="delete" className="ml5" colors="primary" size='sm'&gt;删除&lt;/</span>Button&gt;
-<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">AcAttachment</span>&gt;</span></span></code></pre><table>
-<thead>
-<tr>
-<th>Attribute</th>
-<th>Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>data-btn</td>
-<td><code>upload</code></td>
-<td>表示上传按钮</td>
-</tr>
-<tr>
-<td>data-btn</td>
-<td><code>download</code></td>
-<td>表示下载按钮</td>
-</tr>
-<tr>
-<td>data-btn</td>
-<td><code>delete</code></td>
-<td>表示删除按钮</td>
-</tr>
-</tbody>
-</table>
-<h3 id="8.-文件列表刷新">8. 文件列表刷新</h3>
+<h2 id="注意事项">注意事项</h2>
+<h2 id="文件列表刷新">文件列表刷新</h2>
 <p>组件在recordId发生变化，会自动刷新文件列表，也可以手动刷新文件列表，用法如下：</p>
 <pre class="hljs"><code>&lt;AcAttachment ref={(c) =&gt; {<span class="hljs-keyword">this</span>.attach = c.attach}} recordId=<span class="hljs-string">''</span> groupname=<span class="hljs-string">''</span> /&gt;
 
 <span class="hljs-comment">//手动刷新文件列表</span>
-<span class="hljs-keyword">this</span>.attach.fLoadFileList();</code></pre><h3 id="9.-自定义弹框删除文件">9. 自定义弹框删除文件</h3>
+<span class="hljs-keyword">this</span>.attach.fLoadFileList();</code></pre><h3 id="自定义弹框删除文件">自定义弹框删除文件</h3>
 <pre class="hljs"><code>&lt;AcAttachment ref={(c) =&gt; {<span class="hljs-keyword">this</span>.attach = c.attach}} recordId=<span class="hljs-string">''</span> groupname=<span class="hljs-string">''</span> /&gt;
 
 <span class="hljs-comment">//手动删除文件</span>
@@ -275,7 +241,8 @@
             attach.fDelete();
         }
     }}
-/&gt;</code></pre>      </div>
+/&gt;</code></pre><h2 id="更新日志">更新日志</h2>
+      </div>
     </div>
   </div>
 
