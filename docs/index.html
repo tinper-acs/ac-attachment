@@ -23,6 +23,7 @@
     <li class="sidebar-header-3"><a href="#6.-事件">6. 事件</a></li>
     <li class="sidebar-header-3"><a href="#7.-自定义按钮">7. 自定义按钮</a></li>
     <li class="sidebar-header-3"><a href="#8.-文件列表刷新">8. 文件列表刷新</a></li>
+    <li class="sidebar-header-3"><a href="#9.-自定义弹框删除文件">9. 自定义弹框删除文件</a></li>
 </ul>
       </div>
       <div class="span9 main"><h2 id="ac-attachment">ac-attachment</h2>
@@ -144,9 +145,9 @@
 <tr>
 <td>fileMaxSize</td>
 <td><code>number</code></td>
-<td><code>10 * 1024 * 1024</code></td>
+<td><code>10</code></td>
 <td>否</td>
-<td>单个上传文件的大小上限，默认是10M</td>
+<td>单个上传文件的大小上限，默认是10M，单位是M</td>
 </tr>
 <tr>
 <td>fileNum</td>
@@ -156,13 +157,6 @@
 <td>上传文件的总数量限制</td>
 </tr>
 <tr>
-<td>deleteConfirm</td>
-<td><code>boolean</code></td>
-<td><code>true</code></td>
-<td>否</td>
-<td>删除时是否弹出确认框，默认弹出</td>
-</tr>
-<tr>
 <td>multiple</td>
 <td><code>boolean</code></td>
 <td><code>true</code></td>
@@ -170,11 +164,32 @@
 <td>是否支持一次多个文件上传，在文件选择框中，按shift或ctrl键，同时选择多个文件，点击确定即可</td>
 </tr>
 <tr>
+<td>disabled</td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+<td>否</td>
+<td>上传，下载，删除按钮是否禁用</td>
+</tr>
+<tr>
 <td>className</td>
 <td><code>string</code></td>
 <td></td>
 <td>否</td>
 <td>附件容器的自定义class</td>
+</tr>
+<tr>
+<td>checkDuplicate</td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>否</td>
+<td>文件上传是否检测文件名重复 </td>
+</tr>
+<tr>
+<td>locale</td>
+<td><code>string</code></td>
+<td><code>zh</code></td>
+<td>否</td>
+<td>组件语言类型，默认是简体中文，目前支持英文(en或en_US)，简体中文(zh_CN)，繁体中文(zh_TW)</td>
 </tr>
 </tbody>
 </table>
@@ -202,6 +217,11 @@
 <td>onFileNumOver</td>
 <td><code>file</code>，当前上传的文件对象</td>
 <td>文件数量超出限制回调</td>
+</tr>
+<tr>
+<td>onDelete</td>
+<td><code>attach</code></td>
+<td>参数attach为附件组件实例，调用attach.fDelete()，可以调起接口删除附件</td>
 </tr>
 </tbody>
 </table>
@@ -241,10 +261,21 @@
 </table>
 <h3 id="8.-文件列表刷新">8. 文件列表刷新</h3>
 <p>组件在recordId发生变化，会自动刷新文件列表，也可以手动刷新文件列表，用法如下：</p>
-<pre class="hljs"><code>&lt;AcAttachment ref={(attach) =&gt; {<span class="hljs-keyword">this</span>.attach = attach}} recordId=<span class="hljs-string">''</span> groupname=<span class="hljs-string">''</span> /&gt;
+<pre class="hljs"><code>&lt;AcAttachment ref={(c) =&gt; {<span class="hljs-keyword">this</span>.attach = c.attach}} recordId=<span class="hljs-string">''</span> groupname=<span class="hljs-string">''</span> /&gt;
 
 <span class="hljs-comment">//手动刷新文件列表</span>
-<span class="hljs-keyword">this</span>.attach.fLoadFileList();</code></pre>      </div>
+<span class="hljs-keyword">this</span>.attach.fLoadFileList();</code></pre><h3 id="9.-自定义弹框删除文件">9. 自定义弹框删除文件</h3>
+<pre class="hljs"><code>&lt;AcAttachment ref={(c) =&gt; {<span class="hljs-keyword">this</span>.attach = c.attach}} recordId=<span class="hljs-string">''</span> groupname=<span class="hljs-string">''</span> /&gt;
+
+<span class="hljs-comment">//手动删除文件</span>
+<span class="hljs-keyword">this</span>.attach.fDelete();</code></pre><pre class="hljs"><code><span class="hljs-comment">//自定义弹出框删除文件</span>
+&lt;AcAttachment recordId=<span class="hljs-string">''</span> groupname=<span class="hljs-string">''</span> 
+    onDelete={(attach) =&gt; {
+        <span class="hljs-keyword">if</span>(confirm(<span class="hljs-string">'确定删除记录吗？'</span>)){
+            attach.fDelete();
+        }
+    }}
+/&gt;</code></pre>      </div>
     </div>
   </div>
 

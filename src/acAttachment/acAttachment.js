@@ -342,7 +342,7 @@ class AcAttachment extends Component{
             let map = {
                 'upload':  (
                     <Button data-btn="upload" colors="primary" className="upload-btn" size='sm'>
-                        <Icon className="uf-upload"></Icon><FormattedMessage id="intl.btn.upload" />
+                        <Icon className="uf-upload"></Icon><FormattedMessage id="intl.btn.upload" defaultMessage="上传"/>
                     </Button>
                 ),
                 'download': (
