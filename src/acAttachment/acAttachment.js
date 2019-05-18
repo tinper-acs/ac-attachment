@@ -75,7 +75,7 @@ class AcAttachment extends Component{
         this.selectedFiles = [];
         this.fileTypeIcons = ['css','doc','html','javascript','jpg','pdf','png','ppt','xls','xml'];
         bindAll(this,['fGetTableColumns','fLoadFileList','fDeleteFile','fUploadSuccess','fUploadDelete','fGetTableList','fGetUploadData',
-                      'fDownload','fDelete','onSelectData','fConClick','beforeUpload','fValidateFileType','fSetSelectedFiles','emptyFunc']);
+                      'fDownload','fDelete','onSelectData','fConClick','beforeUpload','fValidateFileType','fSetSelectedFiles']);
     }
     get uploadUrl(){
         return `${this.props.baseUrl}${this.props.uploadUrl}?t=${new Date().getTime()}`;
