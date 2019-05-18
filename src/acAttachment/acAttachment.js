@@ -477,14 +477,6 @@ class AcAttachment extends Component{
     getMsg(id){
         return clearHtml(document.getElementById(id).innerHTML);
     }
-    emptyFunc(){
-        const {intl} = this.props;
-
-        return (<div>
-            <i className="uf uf-list-s-o" style={{fontSize:'60px'}}></i>
-            <div style={{marginTop: '-17px'}}>{intl.formatMessage({id:'intl.table.nodata'})}</div>
-        </div>);
-    }
     fGetUploadData(){
         let {recordId,groupname,permission,url} = this.props;
 
@@ -541,7 +533,6 @@ class AcAttachment extends Component{
                         data={tableList}
                         multiSelect={{type:'checkbox'}}
                         getSelectedDataFunc={this.onSelectData}
-                        emptyText={this.emptyFunc}
                     />
                 </div> 
 		)

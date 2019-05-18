@@ -96,7 +96,7 @@
     "bee-checkbox": "^1.2.6",
     "bee-icon": "^1.0.5",
     "bee-message": "^1.0.12",
-    "bee-table": "^1.5.8",
+    "bee-table": "^2.0.19",
     "classnames": "^2.2.6",
     "react-cookies": "^0.1.0",
     "react-intl": "^2.8.0"
