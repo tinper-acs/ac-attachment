@@ -16,7 +16,7 @@ import Icon from 'bee-icon';
 import Message from 'bee-message';
 import axios from 'axios';
 import cookie from 'react-cookies';
-import './index.less';
+import './index.scss';
 
 
 let MultiSelectSortTable  = multiSelect(sort(Table, Icon), Checkbox);
