@@ -43,7 +43,11 @@ const propTypes = {
     disabled: PropTypes.bool,
     onDelete: PropTypes.func,
     checkDuplicate: PropTypes.bool,
-    locale: PropTypes.string
+    locale: PropTypes.string,
+    onUploadSuccess: PropTypes.func,
+    onUploadError: PropTypes.func,
+    onUploadDelete: PropTypes.func,
+    onDeleteFile: PropTypes.func
 }
 
 const defaultProps = {
@@ -208,12 +212,18 @@ class AcAttachment extends Component{
     fUploadSuccess = (data) => {
         const self = this;
         self.fLoadFileList();
+
+        let {onUploadSuccess} = self.props;
+        onUploadSuccess && onUploadSuccess(data);
     }
     fUploadDelete(data){
         const files = data.response.data;
         if(files && files.length){
             this.fDeleteFile(files[0].id).then(() => {
                 this.fLoadFileList(); 
+
+                let {onUploadDelete} = this.props;
+                onUploadDelete && onUploadDelete(data);
             });
         }
     }
@@ -229,6 +239,9 @@ class AcAttachment extends Component{
         this.fBatchDeleteFiles(ids).then(() => {
             this.fLoadFileList();
             this.fSetSelectedFiles([]);
+            
+            let {onDeleteFile} = this.props;
+            onDeleteFile && onDeleteFile(ids);
         });
     }
     onSelectData(data){
@@ -530,11 +543,14 @@ class AcAttachment extends Component{
                         maxSize={fileMaxSize}
                         beforeUpload={this.beforeUpload}
                         onError={(err) => {
-                            console.log(err);
                             Message.create({
                                 content: intl.formatMessage({id:'intl.upload.error'}), 
                                 color: 'danger'
-                            });}}
+                            });
+
+                            let {onUploadError} = this.props;
+                            onUploadError && onUploadError(err);
+                        }}
                         onSuccess={this.fUploadSuccess}
                         onDelete={this.fUploadDelete}
                     >
