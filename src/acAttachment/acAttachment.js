@@ -16,6 +16,8 @@ import Icon from 'bee-icon';
 import Message from 'bee-message';
 import axios from 'axios';
 import cookie from 'react-cookies';
+import Popconfirm from 'bee-popconfirm';
+import 'bee-popconfirm/build/Popconfirm.css';
 import './index.scss';
 
 
@@ -78,7 +80,7 @@ class AcAttachment extends Component{
         }
         this.selectedFiles = [];
         this.fileTypeIcons = ['css','doc','html','javascript','jpg','pdf','png','ppt','xls','xlsx','xml'];
-        bindAll(this,['fGetTableColumns','fLoadFileList','fDeleteFile','fUploadSuccess','fUploadDelete','fGetTableList','fGetUploadData',
+        bindAll(this,['fGetTableColumns','fLoadFileList','fDeleteFile','fUploadSuccess','fUploadDelete','fDeleteInRow','fGetTableList','fGetUploadData',
                       'fDownload','fDelete','onSelectData','fConClick','beforeUpload','fValidateFileType','fSetSelectedFiles','fGetBtnByType']);
     }
     get uploadUrl(){
@@ -216,6 +218,14 @@ class AcAttachment extends Component{
         let {onUploadSuccess} = self.props;
         onUploadSuccess && onUploadSuccess(data);
     }
+    fDeleteInRow(id){
+        this.fDeleteFile(id).then(() => {
+            this.fLoadFileList(); 
+
+            let {onDeleteFile} = this.props;
+            onDeleteFile && onDeleteFile([id]);
+        });
+    }
     fUploadDelete(data){
         const files = data.response.data;
         if(files && files.length){
@@ -274,9 +284,14 @@ class AcAttachment extends Component{
             { title: '', dataIndex: '', key: '', width: 50, 
               render(text, record, index) {
                 return (
-                  <a href={downloadUrl + '&id=' + record.id} target="_blank">
-                    <Icon className="uf-cloud-down"></Icon>
-                  </a>
+                    <React.Fragment>
+                        <a href={downloadUrl + '&id=' + record.id} target="_blank">
+                            <Icon className="uf-cloud-down"></Icon>
+                        </a>
+                        <Popconfirm trigger="click" placement="right" content={'确定删除此记录吗？'} onClose={() => this.fDeleteInRow(record.id)}>
+                            <Icon className="uf-del attach-del"></Icon>
+                        </Popconfirm>
+                    </React.Fragment>
                 );
               }
             },
@@ -528,10 +543,11 @@ class AcAttachment extends Component{
         let {fileType,className,multiple,intl,locale} = this.props;
         let fileMaxSize = this.fileMaxSize;
         let uploadUrl = this.uploadUrl;
-		let uploadData = this.fGetUploadData();
+        let uploadData = this.fGetUploadData();
+        let conClass = classNames('ac-attachmentc',className);
         
 		return (
-                <div className={className} onClick={this.fConClick}>
+                <div className={conClass} onClick={this.fConClick}>
                     <AcUpload
                         locale={locale}
                         title={intl.formatMessage({id:'intl.upload.title'})}
